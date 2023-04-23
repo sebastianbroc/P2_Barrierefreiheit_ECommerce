@@ -1,0 +1,7 @@
+﻿/UserAccessService/obj/
+/UserAccessService/bin/
+/UserAuthentificationService/obj/
+/UserAuthentificationService/bin/
+*/.idea
+/.idea/
+
