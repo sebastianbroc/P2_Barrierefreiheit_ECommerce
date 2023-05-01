@@ -1,4 +1,4 @@
-# Framework to use for "ARlebnispfade"
+# Frontend-Framework zur Umsetzung des P2
 
 * Status: accepted
 * Workload: 1h
