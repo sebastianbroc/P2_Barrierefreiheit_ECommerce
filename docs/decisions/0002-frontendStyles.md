@@ -12,9 +12,9 @@ Die Wahl der richtigen Methode zur Umsetzung des Stylings ist entscheidend für 
 
 ## Optionen
 
-* [Reines CSS](https://react.dev)
-* [Sass](https://vuejs.org)
-* [SCSS](https://angular.io)
+* Reines CSS
+* Sass
+* SCSS
 
 ## Entscheidung
 
