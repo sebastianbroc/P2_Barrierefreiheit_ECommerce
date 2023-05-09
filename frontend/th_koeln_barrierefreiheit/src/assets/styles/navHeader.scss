@@ -1,0 +1,139 @@
+@import "vars";
+
+.m-navHead {
+  margin-top: $bfs * 2;
+  margin-bottom: 98px;
+  line-height: 64px;
+  font-size: 64px;
+  display: flex;
+  align-items: center;
+
+
+  a {
+    color: #000;
+  }
+
+  a:hover {
+    color: $mi-pink;
+  }
+
+  &--logoSlash,
+  &--logoSlug {
+    display: inline-block;
+  }
+
+  &--logoSlash {
+    color: $mi-pink;
+  }
+
+  &--logoSlug {
+    font-weight: 400;
+  }
+
+
+  &--text {
+    display: inline-block;
+    font-family: $family-headlines;
+    font-weight: bold;
+
+  }
+
+  &--hamburger {
+    font-size: 48px;
+    display: inline-block;
+    width: 72px;
+    height: 1em;
+    padding: 0;
+    cursor: pointer;
+    transition: transform .2s ease-in-out;
+    vertical-align: middle;
+    border: 0 none;
+    background: transparent;
+    margin-left: 8px;
+    margin-right: 14px;
+    margin-bottom: -14px;
+
+    & > img{
+      // height: 80px;
+    }
+
+    // Button height fix for Firefox
+    &::-moz-focus-inner {
+      padding: 0;
+      border: 0 none;
+    }
+
+    // Focus fix for Chrome
+    &:focus {
+      outline: none;
+    }
+
+    #balken-1, #balken-3{
+      transition: transform 0.6s, opacity 0.6s;
+      transform-origin: 50% 50%;
+    }
+
+    &.is-open{
+
+      #balken-1{
+        transform: rotate(45deg) translateY(30%);
+      }
+
+      #balken-2{
+        opacity: 0;
+      }
+
+      #balken-3{
+        transform: rotate(-45deg) translateY(-30%);
+
+      }
+    }
+  }
+
+}
+
+
+@media(max-width: 640px) {
+
+  .m-navHead{
+    margin-top: $bfs-xl;
+    padding-bottom: $bfs-xl;
+    border-bottom: solid 3px $mi-gruen;
+    margin-bottom: $bfs-xl;
+  }
+
+  .m-navHead--text,
+  .m-navHead--logoSlash,
+  .m-navHead--logoSlug {
+    font-size: 36px;
+  }
+
+  .m-navHead--hamburger {
+    font-size: 26px;
+    width: 44px;
+    margin-bottom: -8px !important;
+    margin-right: 4px;
+
+    &::before,
+    &::after,
+    .icon {
+      width: 36px;
+      height: 6px;
+    }
+  }
+}
+
+@media(max-width: 1440px) {
+  .m-navHead--text span {
+    display: none;
+  }
+
+  .m-navHead--logoSlug:first-child,
+  .m-navHead--logoSlash:nth-child(2) {
+    display: inline-block;
+  }
+
+  .m-navHead--logoSlug:last-child {
+    display: inline-block;
+  }
+}
