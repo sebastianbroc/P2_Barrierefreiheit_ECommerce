@@ -2,19 +2,19 @@
   <div class="login">
     <router-link to="/">zurück</router-link>
     <div class="forms">
-      <form>
+      <form id="register_form">
         <h1>Registrieren</h1>
-        <label for="register_email">E-Mail</label><br><input type="text" name="email" id="register_email" :value="register_email"><br>
-        <label for="register_name">Name</label><br><input type="text" name="name" id="register_name" :value="register_name">
-        <label for="register_password">Passwort</label><br><input type="password" name="password" id="register_password" :value="register_password">
-        <label for="register_password_repeat">Passwort (wiederholen)</label><br><input type="password" name="password_repeat" id="register_password_repeat" :value="register_password_repeat">
+        <label for="register_email">E-Mail</label><br><input type="text" name="email" id="register_email" v-model="register_email"><br>
+        <label for="register_name">Name</label><br><input type="text" name="name" id="register_name" v-model="register_name" >
+        <label for="register_password">Passwort</label><br><input type="password" name="password" id="register_password" v-model="register_password" >
+        <label for="register_password_repeat">Passwort (wiederholen)</label><br><input type="password" name="password_repeat" id="register_password_repeat" v-model="register_password_repeat" >
         <input type="submit" value="Registrieren">
       </form>
-      <div class="separator"></div>
-      <form>
+      <div class="separator" id="separator"></div>
+      <form id="login_form">
         <h1>Login</h1>
-        <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" :value="login_email"><br>
-        <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" :value="login_password">
+        <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" v-model="login_email"><br>
+        <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" v-model="login_password">
         <input type="submit" value="Login">
       </form>
     </div>
@@ -27,12 +27,49 @@ export default {
   name: 'HomeView',
   data(){
     return {
+      isMounted : false,
       register_email: null,
       register_name: null,
       register_password: null,
       register_password_repeat: null,
       login_email: null,
       login_password: null
+    }
+  },
+  mounted() {
+    this.isMounted = true
+  },
+  methods : {
+    expandForm(){
+        if(this.register_email || this.register_name || this.register_password || this.register_password_repeat){
+          console.log("moin!")
+          document.getElementById("register_form").classList.add("active")
+          document.getElementById("register_form").classList.remove("passive")
+          document.getElementById("login_form").classList.add("passive")
+          document.getElementById("login_form").classList.remove("active")
+          document.getElementById("separator").classList.add("hide")
+        } else if (this.login_email || this.login_password) {
+          document.getElementById("login_form").classList.add("active")
+          document.getElementById("login_form").classList.remove("passive")
+          document.getElementById("register_form").classList.add("passive")
+          document.getElementById("register_form").classList.remove("active")
+          document.getElementById("separator").classList.add("hide")
+        } else {
+          document.getElementById("register_form").removeAttribute("class");
+          document.getElementById("login_form").removeAttribute("class");
+          document.getElementById("separator").classList.remove("hide");
+        }
+    }
+  },
+  watch: {
+    $data: {
+      handler() {
+        if(this.isMounted){
+          this.expandForm();
+        }
+      },
+      deep: true,
+      immediate: true
     }
   }
 }
@@ -72,10 +109,21 @@ export default {
 
   form {
     width: 50%;
+    overflow: hidden;
+    transition: 0.2s ease;
+
+    &.passive {
+      width: 0;
+    }
+
+    &.active {
+      width: 100%;
+    }
 
     label {
       font-size: $s;
       color: $mi-hellgrau;
+      white-space: nowrap;
     }
 
     input[type=text], input[type=password] {
@@ -86,6 +134,7 @@ export default {
     }
 
     input[type=submit] {
+      cursor: pointer;
       font-family: "Roboto Slab";
       font-weight: bold;
       background: $mi-lila;
@@ -100,6 +149,12 @@ export default {
   background: $mi-hellgrau;
   width: 1px;
   margin: 0 $l 0 $l;
+  transition: 0.2s ease;
+
+  &.hide {
+    background: rgba(0,0,0,0);
+    margin: 0;
+  }
 }
 
 .extender {
