@@ -2,7 +2,9 @@
   <div class="home">
     <div class="cover-text">
       <NavHeader/>
-      <h1>Deine Anlaufstelle für alles,<br>was <b>Barrierefreiheit im Web</b> angeht.</h1>
+      <div class="title_wrapper">
+        <h1>Deine Anlaufstelle für alles,<br>was <b>Barrierefreiheit im Web</b> angeht.</h1>
+      </div>
     </div>
     <div class="content has-gap">
       <div class="m-mi-textblock has-seperator">
@@ -24,7 +26,7 @@
       </div>
     </div>
     <div class="footer">
-      <button>Hier geht's los!</button>
+      <button @click="$router.push('/login')">Hier geht's los!</button>
     </div>
   </div>
 </template>
@@ -53,15 +55,36 @@ export default {
   background-size: cover;
   border-bottom: solid 3px #00ad2f;
 
+  .title_wrapper{
+    display: flex;
+    justify-content: center;
+  }
+
   h1 {
     text-align: center;
     color: $mi-hellgrau;
     text-shadow: 2px 2px 10px black;
+    padding: $xs;
+    white-space: nowrap;
+    overflow: hidden;
+    animation:
+        typing 3.5s steps(50, end)
   }
 
   b {
     color: $mi-pink;
   }
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: white; }
 }
 
 .content {
