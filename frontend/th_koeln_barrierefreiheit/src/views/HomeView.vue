@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="cover-text">
-      <NavHeader/>
+      <NavHeader :links="this.navLinks"/>
       <div class="title_wrapper">
         <h1>Deine Anlaufstelle für alles,<br>was <b>Barrierefreiheit im Web</b> angeht.</h1>
       </div>
@@ -37,12 +37,23 @@ import NavHeader from "@/components/navHeader.vue";
 
 export default {
   name: 'HomeView',
-  components: {NavHeader}
+  components: {NavHeader},
+  data(){
+    return {
+      navLinks: [
+        {
+          link: "/",
+          name:"accessibility"
+        }
+      ]
+    }
+  },
 }
 </script>
-<style lang="scss">
-.m-navHead {
+<style lang="scss" scoped>
+:deep(.m-navHead) {
   margin-top: 0;
+
   a {
     color: $mi-hellgrau;
   }

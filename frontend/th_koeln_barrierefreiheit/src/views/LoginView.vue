@@ -2,7 +2,7 @@
   <div class="login">
     <router-link to="/">zurück</router-link>
     <div class="forms">
-      <form id="register_form">
+      <form id="register_form" @submit="register">
         <h1>Registrieren</h1>
         <label for="register_email">E-Mail</label><br><input type="text" name="email" id="register_email" v-model="register_email"><br>
         <label for="register_name">Name</label><br><input type="text" name="name" id="register_name" v-model="register_name" >
@@ -11,11 +11,11 @@
         <input type="submit" value="Registrieren">
       </form>
       <div class="separator" id="separator"></div>
-      <form id="login_form">
+      <form id="login_form" @submit="login">
         <h1>Login</h1>
         <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" v-model="login_email"><br>
         <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" v-model="login_password">
-        <input type="submit" value="Login">
+        <input type="submit" value="Login"><router-link to="/guidelines">Weiter ohne Login</router-link>
       </form>
     </div>
     <!--<div class="extender"></div>-->
@@ -40,19 +40,24 @@ export default {
     this.isMounted = true
   },
   methods : {
+    login(){
+    this.$router.push('/guidelines');
+    },
+    register(){
+      this.$router.push('/guidelines');
+    },
     expandForm(){
-        if(this.register_email || this.register_name || this.register_password || this.register_password_repeat){
-          console.log("moin!")
-          document.getElementById("register_form").classList.add("active")
-          document.getElementById("register_form").classList.remove("passive")
-          document.getElementById("login_form").classList.add("passive")
-          document.getElementById("login_form").classList.remove("active")
-          document.getElementById("separator").classList.add("hide")
-        } else if (this.login_email || this.login_password) {
+        if(this.login_email || this.login_password){
           document.getElementById("login_form").classList.add("active")
           document.getElementById("login_form").classList.remove("passive")
           document.getElementById("register_form").classList.add("passive")
           document.getElementById("register_form").classList.remove("active")
+          document.getElementById("separator").classList.add("hide")
+        } else if (this.register_email || this.register_name || this.register_password || this.register_password_repeat) {
+          document.getElementById("register_form").classList.add("active")
+          document.getElementById("register_form").classList.remove("passive")
+          document.getElementById("login_form").classList.add("passive")
+          document.getElementById("login_form").classList.remove("active")
           document.getElementById("separator").classList.add("hide")
         } else {
           document.getElementById("register_form").removeAttribute("class");
@@ -89,6 +94,7 @@ export default {
     color: $mi-hellgrau;
     top: $l;
     left: $l;
+    z-index: 2;
   }
 }
 
@@ -118,6 +124,20 @@ export default {
 
     &.active {
       width: 100%;
+    }
+
+    a {
+      display: block;
+      font-family: "PT Sans";
+      font-size: $bfs;
+      color: $mi-grau;
+      position: relative;
+      text-align: center;
+      margin-top: $l * 2;
+      width: 100%;
+      top: auto;
+      left: auto;
+      white-space: nowrap;
     }
 
     label {
@@ -170,6 +190,41 @@ export default {
 @media only screen and (max-width: 900px){
   .forms, .extender {
     width: 100%;
+  }
+
+  #separator {
+    background: none;
+    height: $l;
+  }
+
+  .forms {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    border-radius: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+
+    form {
+      width: 100%;
+
+      a {
+        margin-top: $l;
+      }
+
+      &.passive {
+        width: 100%;
+      }
+
+      &.active {
+        width: 100%;
+      }
+    }
+
+    h1 {
+      margin-bottom: $xs;
+    }
   }
 }
 </style>
