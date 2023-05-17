@@ -10,7 +10,7 @@
       </svg>
     </button>
     <div class="m-navHead--text">
-      <a href="https://www.medieninformatik.th-koeln.de/">mi&nbsp;</a>
+      <router-link :to="'/'" >mi&nbsp;</router-link>
         <span class="m-navHead--logoSlash" v-for="link in this.links" :key="link.link" :value="link.link">/</span>
         <span class="m-navHead--logoSlug" v-for="link in this.links" :key="link.link" :value="link.link">
           <router-link :to=link.link>&nbsp;{{link.name}}</router-link>

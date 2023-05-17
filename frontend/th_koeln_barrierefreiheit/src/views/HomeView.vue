@@ -57,6 +57,10 @@ export default {
   a {
     color: $mi-hellgrau;
   }
+
+  a:hover {
+    color: $mi-pink;
+  }
 }
 
 
