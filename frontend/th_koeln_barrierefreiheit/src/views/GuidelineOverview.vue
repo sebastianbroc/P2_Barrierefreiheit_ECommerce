@@ -8,12 +8,12 @@
             <h2>{{guideline.title}}</h2>
             <div class="approvements">
               <div class="approvement_list" v-if="guideline.approvements">
-                <img v-for="approvement in guideline.approvements.slice(0, 5)" :key="approvement.userId" :value="approvement.userId" :src=approvement.image >
+                <router-link v-for="approvement in guideline.approvements.slice(0, 5)" :to="'/user?u=' + approvement.userId" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
                 <img v-if="guideline.approvements && guideline.approvements.length >= 5" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert">
                 <img v-if="!guideline.approvements || guideline.approvements.length < 1" src="@/assets/images/warning.png" class="no_approvements" title="Diese Guideline wurde noch nicht bestätigt">
               </div>
-              <h3 v-if="guideline.approvements && guideline.approvements.length > 0">durch <b>{{guideline.approvements.length}}</b> Experten bestätigt.</h3>
-              <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt.</h3>
+              <h3 v-if="guideline.approvements && guideline.approvements.length > 0">durch <b>{{guideline.approvements.length}}</b> Experten bestätigt</h3>
+              <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt</h3>
             </div>
           </div>
           <p>{{guideline.teaser}}</p>
@@ -208,6 +208,30 @@ a:hover {
       &:has(.verified_badge) {
       transform: translateX(+20px);
     }
+
+      a {
+        margin: 0;
+        padding: 0;
+        height: $l * 1.5;
+
+        .expert_name {
+          font-size: $bfs-xs;
+          text-align: center;
+          background: $mi-black;
+          display: none;
+          position: fixed;
+          padding: 1px;
+        }
+
+        &:hover {
+          img {
+            filter: drop-shadow(0 0 5px $mi-pink);
+          }
+          .expert_name {
+            display: inherit;
+          }
+        }
+      }
 
       img {
         width: $l * 1.5;
