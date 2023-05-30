@@ -22,6 +22,16 @@ builder.Configuration.AddUserSecrets(Assembly.GetCallingAssembly());
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONN")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "cors_policy",
+        policy  =>
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseCors("cors_policy");
 
 app.UseHttpsRedirection();
 
