@@ -91,7 +91,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .content {
   margin-top: 50px;
   height: 70%;
@@ -127,7 +127,7 @@ export default {
   }
 
   #text {
-    a {
+    :deep(a) {
       color: black;
       background: rgb(255, 251, 150);
     }
