@@ -1,12 +1,12 @@
 namespace GuidelineAPI;
 
-public class Guideline
+public class Guideline : BaseModel
 {
-    public DateOnly Date { get; set; }
-
-    public int TemperatureC { get; set; }
-
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-    public string? Summary { get; set; }
+    public Guid Author { get; set; }
+    
+    public String Text { get; set; }
+    
+    public List<Guid> ApprovedBy { get; set; }
+    public List<Comment> Comments { get; set; }
+    
 }

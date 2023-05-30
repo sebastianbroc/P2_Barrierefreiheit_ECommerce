@@ -1,3 +1,4 @@
+using GuidelineAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidelineAPI.Controllers;
@@ -6,27 +7,36 @@ namespace GuidelineAPI.Controllers;
 [Route("[controller]")]
 public class GuidelineController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private readonly IGuidelineService _service;
+    private readonly ILogger<CommentController> _logger;
 
-    private readonly ILogger<GuidelineController> _logger;
-
-    public GuidelineController(ILogger<GuidelineController> logger)
+    public GuidelineController(ILogger<CommentController> logger, IGuidelineService service)
     {
         _logger = logger;
+        _service = service;
     }
 
     [HttpGet(Name = "GetGuideline")]
     public IEnumerable<Guideline> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new Guideline
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        return _service.GetAll();
+    }
+    
+    [HttpPost(Name = "CreateGuideline")]
+    public Guideline Post(Guideline guideline)
+    {
+        return _service.Create(guideline);
+    }
+    
+    [HttpPut(Name = "UpdateGuideline")]
+    public Guideline Put(Guideline guideline) 
+    {
+        return _service.Update(guideline);
+    }
+
+    [HttpDelete(Name = "DeleteGuideline")]
+    public void Delete(Guid id)
+    {
+        _service.Delete(id);
     }
 }
