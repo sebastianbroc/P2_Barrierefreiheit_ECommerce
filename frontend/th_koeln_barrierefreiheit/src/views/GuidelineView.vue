@@ -3,9 +3,9 @@
     <NavHeader :links=this.navLinks />
     <div class="content has-gap">
     <div class="guideline">
-      <div class="title"><h1>{{this.title}}</h1><img v-if="verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"></div>
-      <h2>von {{this.author}}</h2>
-      <p v-html="text" id="text"></p>
+      <div class="title"><h1>{{guideline.title}}</h1><img v-if="guideline.verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"></div>
+      <h2>von {{guideline.author}}</h2>
+      <p v-html="guideline.text" id="text"></p>
       <div id="annotation">
         <div v-if="activeAnnotation">
           <img :src="activeAnnotation.image">
@@ -41,13 +41,19 @@ export default {
         }
       ],
       activeAnnotation: null,
-      title: "Optimieren des DOM für Screenreader",
-      author: "Thomas Schmitz",
-      text: "HTML ist eine Auszeichnungssprache und muss von <a id='999' class='annotationLink'>jedem professionellen Webentwickler beherrscht werden</a>. Ein standardkonformes HTML-Grundgerüst erleichtert Software wie Browsern und Hilfsmitteln behinderter Nutzer die korrekte Aufbereitung einer Webseite. Bei der Barrierefreiheit geht es vor allem um ein strukturiertes und linearisierbares HTML-Grundgerüst. Erst wenn ein Dokument mit einer Auszeichnungssprache semantisch aufbereitet wird, lassen sich weitere Prinzipien von Webstandards, etwa die Trennung von Inhalt und Layout, effizient umsetzen. Diese Seite bietet einen knappen Überblick über verfügbare Layout-Techniken. HTML bietet drei grundlegende Layouttechniken.\n\nStandardkonformität setzt u.a. die Trennung von Inhalt und Layout voraus, d.h. alle Aspekte von Layout und Formatierung sind über CSS vorzunehmen; damit wird die Darstellung von Webseiten auf diverse Endgeräte erst möglich. Tabellen und Frames sind ungeeignet für eine barrierefreie Webgestaltung, weil sie die visuelle Anordnung am Bildschirm vorgeben. Bevor ein CSS-Design umgesetzt werden kann, muss die Linearisierbarkeit und Strukturierung der Inhalte im HTML vorgenommen werden. Eine weitere Voraussetzung für Barrierefreiheit ist die Berücksichtigung der Prinzipien des Progressive Enhancement, d.h. Inhalte müssen immer genutzt werden können, auch wenn ergänzende Techniken wie Bilder oder JavaScript im Browser des Nutzers nicht unterstützt werden oder abgeschaltet sind. Progressive Enhancement besagt, dass HTML stets die Grundtechnik für alle Informationen und Funktionen ist und alle weiteren Techniken, seien es CSS oder JavaScript, aber auch der Einsatz von Grafiken und anderen Objekten als optional zu betrachten sind. Die Entwicklung von Webstandards war vor allem in den 1990er rasant. Zwischenzeitlich hat sich die Verabschiedung von Webstandards stark verändert, weil veröffentlichte Webstandards auch den Praxistest bestehen müssen.\n\nDer Einsatz von gültigem HTML ist ein Teilaspekt von Barrierefreiheit. Vor allem ist der korrekte Syntax die Voraussetzung für valides HTML — ein Qualitätsmerkmal für Webentwickler. Mit dieser Tabelle können alle jemals spezifizierten HTML-Elemente in HTML 2.0, HTML 3.2, HTML 4.01, XHTML, HTML5 und HTML 5.1 nebeneinander verglichen werden. Einige Elemente gibt es nicht mehr, einige haben es nie wirklich geschafft und einige werden in der Zukunft eine neue Bedeutung bekommen. Für die Webentwicklung wird mit Accessible Rich Internet Applications (ARIA) zunächst ein Satz von Attributen bestimmt, die HTML, SVG und andere Auszeichnungssprachen mit mehr Semantik ausstatten. Diese betreffen u.a. Webanwendungen: Mit ARIA-Attributen können Widgets so ausgezeichnet werden, dass sie semantisch solchen Komponenten entsprechen, über die ein Betriebssystem verfügt, mit der Folge, dass sie von Screenreadern und anderen Hilfsmitteln besser bedient werden können. ARIA umfasst aber weitaus mehr als einige Attribute. Zunächst ist ARIA eine Spezifikation an Browser und Hilfsmittel. Darüber hinaus hat der Webstandard einen merklichen Einfluss auf HTML5 gehabt. Insgesamt geht es aber darum, dass Screenreader und andere Hilfsmittel sich auf eine spezielle Schnittstelle des Betriebssystems stützen und dass ARIA die Technik ist, die die Webentwicklung benötigt, um diese Schnittstelle sinnvoll zu bedienen.",
-      verified: true
+      guideline: {
+        title: "Optimieren des DOM für Screenreader",
+        author: "Thomas Schmitz",
+        text: "HTML ist eine Auszeichnungssprache und muss von <a id='999' class='annotationLink'>jedem professionellen Webentwickler beherrscht werden</a>. Ein standardkonformes HTML-Grundgerüst erleichtert Software wie Browsern und Hilfsmitteln behinderter Nutzer die korrekte Aufbereitung einer Webseite. Bei der Barrierefreiheit geht es vor allem um ein strukturiertes und linearisierbares HTML-Grundgerüst. Erst wenn ein Dokument mit einer Auszeichnungssprache semantisch aufbereitet wird, lassen sich weitere Prinzipien von Webstandards, etwa die Trennung von Inhalt und Layout, effizient umsetzen. Diese Seite bietet einen knappen Überblick über verfügbare Layout-Techniken. HTML bietet drei grundlegende Layouttechniken.\n\nStandardkonformität setzt u.a. die Trennung von Inhalt und Layout voraus, d.h. alle Aspekte von Layout und Formatierung sind über CSS vorzunehmen; damit wird die Darstellung von Webseiten auf diverse Endgeräte erst möglich. Tabellen und Frames sind ungeeignet für eine barrierefreie Webgestaltung, weil sie die visuelle Anordnung am Bildschirm vorgeben. Bevor ein CSS-Design umgesetzt werden kann, muss die Linearisierbarkeit und Strukturierung der Inhalte im HTML vorgenommen werden. Eine weitere Voraussetzung für Barrierefreiheit ist die Berücksichtigung der Prinzipien des Progressive Enhancement, d.h. Inhalte müssen immer genutzt werden können, auch wenn ergänzende Techniken wie Bilder oder JavaScript im Browser des Nutzers nicht unterstützt werden oder abgeschaltet sind. Progressive Enhancement besagt, dass HTML stets die Grundtechnik für alle Informationen und Funktionen ist und alle weiteren Techniken, seien es CSS oder JavaScript, aber auch der Einsatz von Grafiken und anderen Objekten als optional zu betrachten sind. Die Entwicklung von Webstandards war vor allem in den 1990er rasant. Zwischenzeitlich hat sich die Verabschiedung von Webstandards stark verändert, weil veröffentlichte Webstandards auch den Praxistest bestehen müssen.\n\nDer Einsatz von gültigem HTML ist ein Teilaspekt von Barrierefreiheit. Vor allem ist der korrekte Syntax die Voraussetzung für valides HTML — ein Qualitätsmerkmal für Webentwickler. Mit dieser Tabelle können alle jemals spezifizierten HTML-Elemente in HTML 2.0, HTML 3.2, HTML 4.01, XHTML, HTML5 und HTML 5.1 nebeneinander verglichen werden. Einige Elemente gibt es nicht mehr, einige haben es nie wirklich geschafft und einige werden in der Zukunft eine neue Bedeutung bekommen. Für die Webentwicklung wird mit Accessible Rich Internet Applications (ARIA) zunächst ein Satz von Attributen bestimmt, die HTML, SVG und andere Auszeichnungssprachen mit mehr Semantik ausstatten. Diese betreffen u.a. Webanwendungen: Mit ARIA-Attributen können Widgets so ausgezeichnet werden, dass sie semantisch solchen Komponenten entsprechen, über die ein Betriebssystem verfügt, mit der Folge, dass sie von Screenreadern und anderen Hilfsmitteln besser bedient werden können. ARIA umfasst aber weitaus mehr als einige Attribute. Zunächst ist ARIA eine Spezifikation an Browser und Hilfsmittel. Darüber hinaus hat der Webstandard einen merklichen Einfluss auf HTML5 gehabt. Insgesamt geht es aber darum, dass Screenreader und andere Hilfsmittel sich auf eine spezielle Schnittstelle des Betriebssystems stützen und dass ARIA die Technik ist, die die Webentwicklung benötigt, um diese Schnittstelle sinnvoll zu bedienen.",
+        verified: true
+      }
     }
   },
   mounted() {
+    if(this.$route.query.g == 2){
+      this.getGuideline()
+    }
+
     let annoLinks = document.getElementsByClassName("annotationLink")
 
     for(let i in annoLinks){
@@ -57,6 +63,11 @@ export default {
     }
   },
   methods: {
+    async getGuideline(){
+        let result = await fetch("http://37.120.175.2:5279/Guideline", {mode: "cors"})
+        result = await result.json()
+        this.guideline = result[0]
+    },
     getAnnotation(input){
       if(this.activeAnnotation && this.activeAnnotation.id === parseInt(input.srcElement.id)){
         document.getElementById("annotation").classList.remove("active")
@@ -72,8 +83,9 @@ export default {
           text: "Diese Textstelle finde ich verbesserungswürdig, weil lorem ipsum dolor ist und so weiter und sofort!"
         }
         document.getElementById("annotation").classList.add("active")
-        document.getElementById("annotation").style.top = (input.srcElement.getBoundingClientRect().top + 30).toString() + "px";
-        document.getElementById("annotation").style.left = (input.srcElement.getBoundingClientRect().left / 2).toString() + "px";
+        console.log(input.srcElement.getBoundingClientRect())
+        document.getElementById("annotation").style.top = (input.srcElement.getBoundingClientRect().y + 30).toString() + "px";
+        document.getElementById("annotation").style.left = ((input.srcElement.getBoundingClientRect().x / 2)).toString() + "px";
       }
     }
   }
@@ -127,7 +139,7 @@ export default {
     align-items: center;
     padding: $bfs;
     border-radius: $bfs-xs;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background: $mi-black;
