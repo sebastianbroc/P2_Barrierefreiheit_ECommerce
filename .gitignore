@@ -2,6 +2,8 @@
 /UserAccessService/bin/
 /UserAuthentificationService/obj/
 /UserAuthentificationService/bin/
+/GuidelineApi/obj/
+/GuidelineApi/bin/
 */.idea
 /.idea/
 
