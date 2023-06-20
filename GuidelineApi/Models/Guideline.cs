@@ -15,7 +15,7 @@ public class GuidelineDto : BaseModel
     public virtual GuidelineUserDto Author { get; set; }
     public String Text { get; set; }
     public virtual List<Guid> ApprovedBy { get; set; }
-    public virtual List<Comment> Comments { get; set; }
+    public virtual List<GuidelineCommentDto> Comments { get; set; }
 }
 
 public class CreateGuidelineDto
@@ -45,7 +45,7 @@ public static class GuidelineDtoExtensions
             ApprovedBy = guideline.ApprovedBy,
             Author = guideline.Author.ToGuidelineUserDto(),
             Text = guideline.Text,
-            Comments = guideline.Comments,
+            Comments = guideline.Comments.Select(c=>c.ToGuidelineCommentDto()).ToList(),
             id = guideline.id
         };
     }

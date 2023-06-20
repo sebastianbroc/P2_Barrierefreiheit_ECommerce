@@ -17,8 +17,12 @@ public class GuidelineService : BaseService<Guideline>, IGuidelineService
             .FirstOrDefault( g=> g.id == id).toGuidelineDto();
     }
 
-    public List<Guideline> GetAll()
+    public List<GuidelineDto> GetAll()
     {
-        return _context.Set<Guideline>().Include(g => g.Comments).ToList();
+        return _context.Set<Guideline>()
+            .Include(g => g.Comments)
+            .Include(g => g.Author)
+            .Select(g=>g.toGuidelineDto())
+            .ToList();
     }
 } 

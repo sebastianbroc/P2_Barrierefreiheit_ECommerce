@@ -6,4 +6,5 @@ public interface IGuidelineService : IBaseService<Guideline>
 {
 
     public GuidelineDto? Get(Guid id);
+    public List<GuidelineDto> GetAll();
 }

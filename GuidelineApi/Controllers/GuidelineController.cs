@@ -19,18 +19,21 @@ public class GuidelineController : ControllerBase
     }
 
     [HttpGet("GetAll",Name = "GetGuidelines")]
-    public IEnumerable<Guideline> Get()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<GuidelineDto>))]
+    public IEnumerable<GuidelineDto> Get()
     {
         return _service.GetAll();
     }
     
     [HttpGet("GetById",Name = "GetGuideline")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GuidelineDto))]
     public GuidelineDto? GetOne(Guid id)
     {
         return _service.Get(id);
     }
     
     [HttpPost(Name = "CreateGuideline")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guideline))]
     public Guideline Post(CreateGuidelineDto guideline)
     {
         var user = _userService.Get(guideline.Author);
@@ -42,12 +45,14 @@ public class GuidelineController : ControllerBase
     }
     
     [HttpPut(Name = "UpdateGuideline")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GuidelineDto))]
     public Guideline Put(Guideline guideline) 
     {
         return _service.Update(guideline);
     }
 
     [HttpDelete(Name = "DeleteGuideline")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
     public void Delete(Guid id)
     {
         _service.Delete(id);
