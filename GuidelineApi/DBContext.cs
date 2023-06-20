@@ -12,4 +12,5 @@ public class DBContext : DbContext
 
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Guideline> Guidelines { get; set; }
+    public DbSet<User> Users { get; set; }
 }

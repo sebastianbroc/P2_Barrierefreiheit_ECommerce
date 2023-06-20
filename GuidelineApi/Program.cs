@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using GuidelineAPI;
 using GuidelineAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IGuidelineService, GuidelineService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Configuration.AddUserSecrets(Assembly.GetCallingAssembly());
@@ -31,6 +33,9 @@ builder.Services.AddCors(options =>
         });
 });
 
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

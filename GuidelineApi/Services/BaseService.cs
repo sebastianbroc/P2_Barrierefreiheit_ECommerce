@@ -12,7 +12,7 @@ public class BaseService<T> : IBaseService<T> where T : BaseModel
         _context = context;
     }
 
-    public T? Get(T obj)
+    public T? Get(Guid obj)
     {
         return _context.Set<T>().Find(obj);
     }
