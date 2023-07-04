@@ -6,7 +6,7 @@ public interface IBaseService<T> where T : BaseModel
 {
     public List<T> GetAll();
 
-    public T? Get(T obj);
+    public T? Get(Guid obj);
 
     public T Create(T obj);
     

@@ -9,13 +9,20 @@ public class GuidelineService : BaseService<Guideline>, IGuidelineService
     {
     }
     
-    public Guideline? Get(Guid id)
+    public GuidelineDto? Get(Guid id)
     {
-        return _context.Set<Guideline>().Include(g => g.Comments).FirstOrDefault( g=> g.id == id);
+        return _context.Set<Guideline>()
+            .Include(g => g.Comments)
+            .Include(g => g.Author)
+            .FirstOrDefault( g=> g.id == id).toGuidelineDto();
     }
 
-    public List<Guideline> GetAll()
+    public List<GuidelineDto> GetAll()
     {
-        return _context.Set<Guideline>().Include(g => g.Comments).ToList();
+        return _context.Set<Guideline>()
+            .Include(g => g.Comments)
+            .Include(g => g.Author)
+            .Select(g=>g.toGuidelineDto())
+            .ToList();
     }
 } 
