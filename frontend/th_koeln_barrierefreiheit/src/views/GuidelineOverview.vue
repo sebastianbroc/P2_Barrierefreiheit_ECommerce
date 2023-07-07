@@ -2,6 +2,15 @@
   <div class="guidelines">
     <NavHeader :links=this.navLinks />
     <div class="content has-gap">
+      <div class="navbar">
+        <select name="category" id="category" >
+          <option value="" selected>Alle Kategorien</option>
+          <option value="sight">Sehbehinderungen</option>
+          <option value="audio">Hörbehinderungen</option>
+          <option value="movement">Mobilitätseinschränkungen</option>
+        </select>
+        <input type="text" name="search" id="search" placeholder="Suche">
+      </div>
       <div class="guideline_list">
         <router-link :to="'/guideline?g=' + guideline.id" class="guideline" v-for="guideline in guidelines" :key="guideline.id" :value="guideline.id">
           <div class="top_row">
@@ -141,6 +150,12 @@ export default {
       ]
     }
   },
+  async mounted(){
+    let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
+    result = await result.json()
+    console.log(result)
+    this.guidelines = result[0]
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -149,6 +164,19 @@ export default {
   height: 70%;
   background: white;
   max-width: $mi-vp-xl;
+}
+
+.navbar {
+  display: flex;
+  gap: $bfs;
+
+  select, input[type='text'] {
+    border: solid 1px $mi-grau;
+    margin-bottom: $bfs;
+    font-family: 'PT Sans';
+    font-size: $bfs-s;
+    padding: 2px;
+  }
 }
 
 .guideline_list {

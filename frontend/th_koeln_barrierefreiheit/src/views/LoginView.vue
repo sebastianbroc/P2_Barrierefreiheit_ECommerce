@@ -15,7 +15,7 @@
         <h1>Login</h1>
         <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" v-model="login_email"><br>
         <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" v-model="login_password">
-        <input type="submit" value="Login"><router-link to="/guidelines">Weiter ohne Login</router-link>
+        <input type="submit" value="Login"><router-link to="/menu">Weiter ohne Login</router-link>
       </form>
     </div>
     <!--<div class="extender"></div>-->
