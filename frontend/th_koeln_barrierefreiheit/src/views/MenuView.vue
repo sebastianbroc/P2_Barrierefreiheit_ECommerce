@@ -73,16 +73,16 @@ export default {
     grid-column: auto / span 2;
 
     &#guidelines {
-      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/guideline_teaser.png');
+      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/guideline_teaser.jpg');
     }
     &#components {
-      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/components_teaser.png');
+      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/components_teaser.jpg');
     }
     &#editor {
-      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/editor_teaser.png');
+      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/editor_teaser.jpg');
     }
     &#user {
-      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/profile_teaser.png');
+      background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/section_teaser/profile_teaser.jpg');
     }
 
     &#user, &#editor {
