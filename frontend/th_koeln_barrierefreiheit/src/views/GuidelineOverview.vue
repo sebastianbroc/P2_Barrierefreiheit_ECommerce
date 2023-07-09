@@ -9,7 +9,7 @@
           <option value="audio">Hörbehinderungen</option>
           <option value="movement">Mobilitätseinschränkungen</option>
         </select>
-        <input type="text" name="search" id="search" placeholder="Suche">
+        <!--<input type="text" name="search" id="search" placeholder="Suche">-->
       </div>
       <div class="guideline_list">
         <router-link :to="'/guideline?g=' + guideline.id" class="guideline" v-for="guideline in guidelines" :key="guideline.id" :value="guideline.id">
