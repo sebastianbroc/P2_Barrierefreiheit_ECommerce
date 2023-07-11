@@ -117,9 +117,9 @@ body {
     display: grid;
     gap: $bfs;
     grid-template-columns:
-    minmax($mi-vp-l/3, $mi-vp-xl/3)
-    minmax($mi-vp-l/3, $mi-vp-xl/3)
-    minmax($mi-vp-l/3, $mi-vp-xl/3)
+    minmax(calc($mi-vp-l/3), calc($mi-vp-xl/3))
+    minmax(calc($mi-vp-l/3), calc($mi-vp-xl/3))
+    minmax(calc($mi-vp-l/3), calc($mi-vp-xl/3))
   };
 
 
