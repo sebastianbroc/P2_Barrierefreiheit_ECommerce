@@ -121,7 +121,7 @@ export default {
         },
         {
           id: 4,
-          title: "Beispielguideline mit Bild",
+          title: "Beispielguideline mit Bild und Quellenangabe",
           teaser: "Im Gegensatz zu Druckmedien, die in der Regel aus Inhalt und einem vorangestellten Inhaltsverzeichnis bestehen, wird auf Webseiten die Navigation gleich mit dem Inhalt geliefert. Fast alle Webseiten bestehen aus Inhalt und mindestens einem Navigationsbereich mit Links zu anderen Seiten des gleichen Anbieters. Je nach Webauftritt können die Navigationsbereiche sehr umfangreich werden.",
           approvements : [
             {
@@ -233,9 +233,12 @@ a:hover {
       display: flex;
       justify-content: flex-end;
 
+
+      @media screen and (min-width: 1000px) {
       &:has(.verified_badge) {
-      transform: translateX(+20px);
-    }
+        transform: translateX(+20px);
+      }
+      }
 
       a {
         margin: 0;
@@ -271,6 +274,52 @@ a:hover {
         transform: translateX(-20px);
         overflow: visible;
         filter: drop-shadow(-2px 0 5px black);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .guideline_list {
+    grid-gap: $bfs-xxs;
+
+    .guideline {
+      max-width: 37vw;
+
+      .top_row {
+        flex-direction: column;
+        h2 {
+          font-size: $bfs-s;
+        }
+        h3 {
+          margin-bottom: 0;
+        }
+      }
+
+      p {
+        font-size: $bfs-xs;
+        max-width: 100%;
+        display: none;
+      }
+
+      .approvements {
+        justify-content: flex-start;
+        align-items: baseline;
+
+        .approvement_list {
+          align-self: baseline;
+          justify-content: flex-start;
+        }
+
+        a {
+          height: $s;
+        }
+
+        img {
+          width: $m;
+          height: $m;
+          margin: 0 5px 0 0;
+        }
       }
     }
   }

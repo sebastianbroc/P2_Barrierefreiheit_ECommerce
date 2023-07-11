@@ -105,16 +105,18 @@ export default {
 .content {
   margin-top: 50px;
   height: 70%;
-  width: 100vw;
   background: white;
 }
 
 .footer {
   padding: $bfs * 6 0 $bfs * 6 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(147,19,206,0)), url('@/assets/images/arrows.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: none;
+  @media screen and (min-width: 730px){
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(147,19,206,0)), url('@/assets/images/arrows.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
   display: flex;
   justify-content: center;
@@ -131,6 +133,17 @@ export default {
 
   button:hover {
     box-shadow: 0px 0px 5px black;
+  }
+}
+
+@media screen and (max-width: 500px){
+  .cover-text {
+    padding-bottom: $bfs-xl;
+  }
+
+  h1 {
+    font-size: $bfs;
+    margin-bottom: 0;
   }
 }
 

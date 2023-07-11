@@ -16,7 +16,7 @@
           <p>Verfasse eine Guideline und teile neues Wissen mit der Welt.</p>
         </router-link>
         <router-link to="/guidelines" class="section" id="user">
-          <h3>Nutzerprofil</h3>
+          <h3>Profil</h3>
           <p>Passe deine Daten an.</p>
         </router-link>
       </div>
@@ -109,6 +109,20 @@ export default {
     &:hover {
       transform: scale(105%);
       box-shadow: 0 10px 10px rgba(0,0,0,0.5);
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .sections {
+    width: 92vw;
+
+    .section {
+      h3 {
+        font-size: $bfs-xl;
+        word-break: break-all;
+        hyphens: auto;
+      }
     }
   }
 }

@@ -205,14 +205,14 @@ export default {
 }
 
 #guidelineTitle {
-  font-family: RobotoSlab;
+  font-family: RobotoSlab, sans-serif;
   border: none;
   font-size: 2rem;
   margin-bottom: 5px;
 }
 
 #guidelineAuthor {
-  font-family: RobotoSlab;
+  font-family: RobotoSlab, sans-serif;
   border: none;
   font-size: 1.5rem;
   margin-bottom: 20px;
