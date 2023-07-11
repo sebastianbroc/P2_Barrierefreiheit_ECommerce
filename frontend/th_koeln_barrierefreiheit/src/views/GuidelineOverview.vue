@@ -99,7 +99,7 @@ export default {
         },
         {
           id: 3,
-          title: "Die 5-Sekunden-Ausnahme für blinkenden Text",
+          title: "Beispielguideline mit Code-Einbindung",
           teaser: "Nutzer müssen auf der Grundlage der Web Content Accessibility Guidelines (WCAG) 2.0 die Möglichkeit haben, blinkende Elemente in einen statischen Zustand versetzen zu können. Blinken bedeutet, dass ein Inhalt zwischen zwei oder mehr visuellen Zuständen wechselt und kann sehr viele Situationen betreffen. In diesem Beitrag wird ein kleiner JavaScript geboten, um blinkenden Text standardkonform anzuzeigen.",
           approvements:[
             {
@@ -121,7 +121,7 @@ export default {
         },
         {
           id: 4,
-          title: "Strukturelle Navigation",
+          title: "Beispielguideline mit Bild",
           teaser: "Im Gegensatz zu Druckmedien, die in der Regel aus Inhalt und einem vorangestellten Inhaltsverzeichnis bestehen, wird auf Webseiten die Navigation gleich mit dem Inhalt geliefert. Fast alle Webseiten bestehen aus Inhalt und mindestens einem Navigationsbereich mit Links zu anderen Seiten des gleichen Anbieters. Je nach Webauftritt können die Navigationsbereiche sehr umfangreich werden.",
           approvements : [
             {
@@ -173,7 +173,7 @@ export default {
   select, input[type='text'] {
     border: solid 1px $mi-grau;
     margin-bottom: $bfs;
-    font-family: 'PT Sans';
+    font-family: "PT Sans", sans-serif;
     font-size: $bfs-s;
     padding: 2px;
   }
@@ -225,7 +225,7 @@ a:hover {
     h3 {
       color: $mi-grau;
       text-align: right;
-      font-family: "PT Sans";
+      font-family: "PT Sans", sans-serif;
       font-size: $bfs-xs;
       white-space: nowrap;
     }

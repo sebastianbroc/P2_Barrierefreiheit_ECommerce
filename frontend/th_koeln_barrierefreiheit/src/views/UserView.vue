@@ -125,7 +125,7 @@ export default {
     color: white;
     padding-right: $bfs-s;
     border-radius: 20px;
-    font-family: "Roboto Slab";
+    font-family: RobotoSlab, sans-serif;
     font-size: $bfs-s;
 
     img {
@@ -160,7 +160,7 @@ export default {
         padding: $bfs-xxs;
 
         h3 {
-          font-family: "PT Sans";
+          font-family: "PT Sans", sans-serif;
           font-size: $bfs-s;
           color: white;
           margin: 0;

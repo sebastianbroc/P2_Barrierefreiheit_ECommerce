@@ -89,7 +89,7 @@ export default {
   background: linear-gradient(to top, $mi-lila, rgba(0,0,0,0.9)), url('@/assets/images/code.jpg');
 
   a {
-    font-family: "Roboto Slab";
+    font-family: RobotoSlab, sans-serif;
     position: absolute;
     color: $mi-hellgrau;
     top: $l;
@@ -128,7 +128,7 @@ export default {
 
     a {
       display: block;
-      font-family: "PT Sans";
+      font-family: "PT Sans", sans-serif;
       font-size: $bfs;
       color: $mi-grau;
       position: relative;
@@ -148,14 +148,14 @@ export default {
 
     input[type=text], input[type=password] {
       background: $mi-hellgrau;
-      font-family: "PT Sans";
+      font-family: "PT Sans", sans-serif;
       width: 100%;
       height: 1.4rem;
     }
 
     input[type=submit] {
       cursor: pointer;
-      font-family: "Roboto Slab";
+      font-family: RobotoSlab, sans-serif;
       font-weight: bold;
       background: $mi-lila;
       color: $mi-hellgrau;

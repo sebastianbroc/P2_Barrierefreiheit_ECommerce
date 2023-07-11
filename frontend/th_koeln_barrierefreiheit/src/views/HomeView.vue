@@ -120,7 +120,7 @@ export default {
   justify-content: center;
 
   button {
-    font-family: "Roboto Slab";
+    font-family: RobotoSlab, sans-serif;
     font-size: $bfs-l;
     background: $mi-pink;
     color: white;
