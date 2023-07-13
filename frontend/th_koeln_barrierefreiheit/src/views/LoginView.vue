@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import AuthService from "@/services/AuthService";
+
 export default {
   name: 'HomeView',
   data(){
@@ -33,15 +35,33 @@ export default {
       register_password: null,
       register_password_repeat: null,
       login_email: null,
-      login_password: null
+      login_password: null,
+      msg: null,
     }
   },
   mounted() {
     this.isMounted = true
   },
   methods : {
-    login(){
-    this.$router.push('/guidelines');
+    async login(){
+        try {
+          const credentials = {
+            username: this.login_email,
+            password: this.login_password
+          };
+          const response = await AuthService.login(credentials);
+
+          const token = response.token;
+          const user = response.user;
+
+          this.$store.dispatch('login', { token, user });
+
+          if(response.status === 200) {
+            this.$router.push('/menu');
+          }
+        } catch (error) {
+          this.msg = error.response.data.msg;
+        }
     },
     register(){
       this.$router.push('/guidelines');

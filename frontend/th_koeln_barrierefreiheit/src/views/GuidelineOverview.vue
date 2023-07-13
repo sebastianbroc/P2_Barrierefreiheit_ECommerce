@@ -36,6 +36,7 @@
 <script>
 
 import NavHeader from "@/components/navHeader.vue";
+import { set, get } from 'idb-keyval'
 
 export default {
   name: 'HomeView',
@@ -153,17 +154,33 @@ export default {
     }
   },
   async mounted(){
-    await this.getGuidelines();
+    await this.getGuidelines(await get("selectedCategory"));
   },
   methods : {
     async getGuidelines(category = null){
+      let selected = null
+      if(category && category.target){
+        selected = category.target.options[category.target.options.selectedIndex].value
+      } else {
+        selected = category
+      }
+      await set("selectedCategory", selected)
+      this.setSelectField(selected);
 
-      if(category && category.target.options[category.target.options.selectedIndex].value === "examples"){
+      if(selected && selected === "examples"){
         this.guidelines = this.guidelineExamples
       } else { //get guidelines from api
         let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
         result = await result.json()
         this.guidelines = result[0]
+      }
+    },
+    setSelectField(selected) {
+      let select = document.getElementById("category");
+      for(let i in select.options) {
+        if (select.options[i].value === selected) {
+          select.options[i].selected = true;
+        }
       }
     }
   }
