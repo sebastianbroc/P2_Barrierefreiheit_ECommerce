@@ -172,7 +172,10 @@ export default {
       } else { //get guidelines from api
         let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
         result = await result.json()
-        this.guidelines = result[0]
+        result[0].title = result[0].text
+        result[0].teaser = result[0].text
+        result[0].approvements = [];
+        this.guidelines = [result[0]]
       }
     },
     setSelectField(selected) {
