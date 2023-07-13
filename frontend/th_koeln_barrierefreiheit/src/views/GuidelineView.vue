@@ -104,7 +104,7 @@ export default {
         author: "Jim Halpert",
         author_id: 2,
         last_update: "26.03.2023",
-        text: "HTML ist eine Auszeichnungssprache und muss von jedem professionellen Webentwickler beherrscht werden. Ein standardkonformes HTML-Grundgerüst erleichtert Software wie Browsern und Hilfsmitteln behinderter Nutzer die korrekte Aufbereitung einer Webseite. <a id='999' class='annotationLink'>Bei der Barrierefreiheit geht es vor allem um ein strukturiertes und linearisierbares HTML-Grundgerüst.</a> Erst wenn ein Dokument mit einer Auszeichnungssprache semantisch aufbereitet wird, lassen sich weitere Prinzipien von Webstandards, etwa die Trennung von Inhalt und Layout, effizient umsetzen. Diese Seite bietet einen knappen Überblick über verfügbare Layout-Techniken. HTML bietet drei grundlegende Layouttechniken, und hier folgt etwas Code: \n\n<pre><code><xmp><!DOCTYPE html>\n" +
+        text: "HTML ist eine Auszeichnungssprache und muss von jedem professionellen Webentwickler beherrscht werden. Ein standardkonformes HTML-Grundgerüst erleichtert Software wie Browsern und Hilfsmitteln behinderter Nutzer die korrekte Aufbereitung einer Webseite. <a id='999' class='annotationLink'>Bei der Barrierefreiheit geht es vor allem um ein strukturiertes und linearisierbares HTML-Grundgerüst.</a> Erst wenn ein Dokument mit einer Auszeichnungssprache semantisch aufbereitet wird, lassen sich weitere Prinzipien von Webstandards, etwa die Trennung von Inhalt und Layout, effizient umsetzen. Diese Seite bietet einen knappen Überblick über verfügbare Layout-Techniken. HTML bietet drei grundlegende Layouttechniken, und hier folgt etwas Code: \n\n<pre><p>HTML</p><code><xmp><!DOCTYPE html>\n" +
             "<html>\n" +
             "<body>\n" +
             "\n" +
@@ -117,7 +117,7 @@ export default {
             "\n" +
             "</body>\n" +
             "</html>\n" +
-            "\n</xmp></code></pre>\n\nFür das Syntax Higlighting wird dabei highlight.js eingebunden. Theoretisch kann zwischen einer vielzahl an Farbschemata gewählt werden, doch hier wirkte es naheliegend, das 'a11y-dark' Thema zu wählen. Javascript oder jegliche andere Programmiersprachen sind selbstverständlich auch möglich, viel Spaß mit etwas Beispielcode aus der Vue-Komponente der aktuellen Seite:\n\n<pre><code><xmp>for(let i in annoLinks){\n" +
+            "\n</xmp></code></pre>\n\nFür das Syntax Higlighting wird dabei highlight.js eingebunden. Theoretisch kann zwischen einer vielzahl an Farbschemata gewählt werden, doch hier wirkte es naheliegend, das 'a11y-dark' Thema zu wählen. Javascript oder jegliche andere Programmiersprachen sind selbstverständlich auch möglich, viel Spaß mit etwas Beispielcode aus der Vue-Komponente der aktuellen Seite:\n\n<pre><p>JS</p><code><xmp>for(let i in annoLinks){\n" +
             "      if (typeof(annoLinks[i]) === \"object\"){\n" +
             "        annoLinks[i].addEventListener(\"click\", this.getAnnotation);\n" +
             "      }\n" +
@@ -353,6 +353,16 @@ export default {
 
     :deep(img) {
       max-width: 100%;
+    }
+
+    :deep(pre p) {
+      color: $mi-pink;
+      background: #3b3b3b;
+      text-align: right;
+      margin: 0;
+      padding: $bfs-xs $bfs $bfs-xs 0;
+      line-height: $bfs;
+      font-size: $bfs;
     }
   }
 

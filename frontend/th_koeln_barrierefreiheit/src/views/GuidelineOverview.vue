@@ -3,11 +3,12 @@
     <NavHeader :links=this.navLinks />
     <div class="content has-gap">
       <div class="navbar">
-        <select name="category" id="category" >
+        <select name="category" id="category" @change="getGuidelines">
           <option value="" selected>Alle Kategorien</option>
           <option value="sight">Sehbehinderungen</option>
           <option value="audio">Hörbehinderungen</option>
           <option value="movement">Mobilitätseinschränkungen</option>
+          <option value="examples">Beispielguidelines</option>
         </select>
         <!--<input type="text" name="search" id="search" placeholder="Suche">-->
       </div>
@@ -47,7 +48,8 @@ export default {
           name: "guidelines"
         }
       ],
-      guidelines: [
+      guidelines: [],
+      guidelineExamples: [
         {
           id: 1,
           title: "Optimieren des DOM für Screenreader",
@@ -151,10 +153,19 @@ export default {
     }
   },
   async mounted(){
-    let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
-    result = await result.json()
-    console.log(result)
-    this.guidelines = result[0]
+    await this.getGuidelines();
+  },
+  methods : {
+    async getGuidelines(category = null){
+
+      if(category && category.target.options[category.target.options.selectedIndex].value === "examples"){
+        this.guidelines = this.guidelineExamples
+      } else { //get guidelines from api
+        let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
+        result = await result.json()
+        this.guidelines = result[0]
+      }
+    }
   }
 }
 </script>
@@ -285,11 +296,15 @@ a:hover {
 
     .guideline {
       max-width: 37vw;
+      padding: $bfs-xxs;
 
       .top_row {
         flex-direction: column;
         h2 {
           font-size: $bfs-s;
+          padding: 0;
+          word-break: break-all;
+          hyphens: auto;
         }
         h3 {
           margin-bottom: 0;
