@@ -2,20 +2,24 @@
   <div class="login">
     <router-link to="/">zurück</router-link>
     <div class="forms">
-      <form id="register_form" @submit="register">
+      <form id="register_form">
         <h1>Registrieren</h1>
         <label for="register_email">E-Mail</label><br><input type="text" name="email" id="register_email" v-model="register_email"><br>
         <label for="register_name">Name</label><br><input type="text" name="name" id="register_name" v-model="register_name" >
         <label for="register_password">Passwort</label><br><input type="password" name="password" id="register_password" v-model="register_password" >
         <label for="register_password_repeat">Passwort (wiederholen)</label><br><input type="password" name="password_repeat" id="register_password_repeat" v-model="register_password_repeat" >
-        <input type="submit" value="Registrieren">
+        <div class="last-line">
+          <input type="button" value="Registrieren" @click="register"><p>{{msg}}</p>
+        </div>
       </form>
       <div class="separator" id="separator"></div>
-      <form id="login_form" @submit="login">
+      <form id="login_form">
         <h1>Login</h1>
         <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" v-model="login_email"><br>
         <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" v-model="login_password">
-        <input type="submit" value="Login"><router-link to="/menu">Weiter ohne Login</router-link>
+        <div class="last-line">
+          <input type="button" value="Login" @click="login"><p>{{msg}}</p>
+        </div><router-link to="/menu">Weiter ohne Login</router-link>
       </form>
     </div>
     <!--<div class="extender"></div>-->
@@ -46,7 +50,7 @@ export default {
     async login(){
         try {
           const credentials = {
-            username: this.login_email,
+            email: this.login_email,
             password: this.login_password
           };
           const response = await AuthService.login(credentials);
@@ -55,16 +59,29 @@ export default {
           const user = response.user;
 
           this.$store.dispatch('login', { token, user });
+          console.log(response)
 
-          if(response.status === 200) {
-            this.$router.push('/menu');
-          }
+          this.$router.push('/menu');
         } catch (error) {
           this.msg = error.response.data.msg;
         }
     },
-    register(){
-      this.$router.push('/guidelines');
+    async register(){
+      try {
+        const credentials = {
+          email: this.register_email,
+          name: this.register_name,
+          password: this.register_password,
+          password_repeat: this.register_password_repeat
+        };
+        const response = await AuthService.signUp(credentials);
+        console.log(response);
+        this.msg = response.msg;
+      } catch (error) {
+        this.msg = error.response.data.msg;
+      }
+
+      return false
     },
     expandForm(){
         if(this.login_email || this.login_password){
@@ -100,6 +117,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+p {
+  color: red;
+  font-size: 0.7rem;
+  margin: 0;
+  line-height: unset;
+}
+
 .login {
   height: 100vh;
   width: 100vw;
@@ -173,13 +197,19 @@ export default {
       height: 1.4rem;
     }
 
-    input[type=submit] {
+    .last-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: $s;
+    }
+
+    input[type=submit], input[type=button] {
       cursor: pointer;
       font-family: RobotoSlab, sans-serif;
       font-weight: bold;
       background: $mi-lila;
       color: $mi-hellgrau;
-      margin-top: $s;
       padding: $xs;
     }
   }

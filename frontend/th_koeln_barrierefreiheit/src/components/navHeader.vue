@@ -16,6 +16,9 @@
           <router-link :to=link.link>&nbsp;{{link.name}}</router-link>
 			</span>
     </div>
+    <div v-if="this.$store.getters.getUser" class="user has-gap">
+      <p>Willkommen <b>{{this.$store.getters.getUser.name}}</b>!</p>
+    </div>
   </div>
 </template>
 
@@ -27,3 +30,14 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.user {
+  margin-left: auto;
+  margin-right: $bfs-xxl*2;
+
+  p {
+    color: $mi-lila;
+    font-size: 0.9rem;
+  }
+}
+</style>

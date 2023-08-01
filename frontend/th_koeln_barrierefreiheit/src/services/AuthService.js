@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = '';
+const url = 'http://localhost:3000/api/';
 
 export default {
     login(credentials) {
