@@ -106,4 +106,23 @@ router.post('/login', (req, res, next) => {
     );
 });
 
+router.post('/returnUser', userMiddleware.isLoggedIn, (req, res, next) => {
+    db.query(
+        `SELECT * FROM users WHERE id = ${db.escape(req.body.id)};`,
+        (err, result) => {
+            // user does not exists
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                return res.status(200).send({
+                    msg: result[0]
+                });
+            }
+        }
+    );
+});
+
 module.exports = router;

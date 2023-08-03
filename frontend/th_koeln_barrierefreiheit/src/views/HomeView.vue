@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="cover-text">
-      <NavHeader :links="this.navLinks"/>
+      <NavHeader :links="this.navLinks" style="margin-right: 1rem;"/>
       <div class="title_wrapper">
         <h1>Deine Anlaufstelle für alles,<br>was <b>Barrierefreiheit im Web</b> angeht.</h1>
       </div>

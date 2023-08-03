@@ -12,5 +12,10 @@ export default {
         return axios
             .post(url + 'sign-up/', credentials)
             .then(response => response.data);
+    },
+    getUser(data) {
+        return axios
+            .post(url + 'returnUser/', data)
+            .then(response => response.data)
     }
 };

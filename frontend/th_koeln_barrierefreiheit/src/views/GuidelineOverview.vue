@@ -170,7 +170,7 @@ export default {
       if(selected && selected === "examples"){
         this.guidelines = this.guidelineExamples
       } else { //get guidelines from api
-        let result = await fetch("http://37.120.175.2:5279/Guideline/GetAll", {mode: "cors"})
+        let result = await fetch("https://api.burnoutstud.io/Guideline/GetAll", {mode: "cors"})
         result = await result.json()
         result[0].title = result[0].text
         result[0].teaser = result[0].text

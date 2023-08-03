@@ -3,12 +3,12 @@
     <NavHeader :links=this.navLinks />
       <div class="user has-gap">
         <div class="bio_wrapper">
-          <img :src="user.image">
+          <img v-if="user.image" :src="user.image">
           <div class="bio">
             <h1>{{user.name}}</h1>
             <span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span>
             <p>{{user.bio}}</p>
-            <h2>Mitglied seit {{user.memberSince}}</h2>
+            <h2>Mitglied seit {{user.registered}}</h2>
           </div>
         </div>
         <div class="contributions">
@@ -32,6 +32,8 @@
 <script>
 
 import NavHeader from "@/components/navHeader.vue";
+import AuthService from "@/services/AuthService";
+import moment from 'moment';
 
 export default {
   name: 'HomeView',
@@ -48,7 +50,7 @@ export default {
         userId: 101,
         name: "Theresa Sauer",
         isExpert: true,
-        memberSince: "26.05.2023",
+        registered: "26.05.2023",
         bio: "Hallo, ich bin Theresa und ich beschäftige mich seit 6 Jahren mit dem Thema Barrierefreiheit im Netz. Durch meine Forschung an der Technischen Hochschule Köln verfüge ich über allerlei Fachwissen, welches ich auf dieser offenen Plattform als Experte beitragen möchte. So können wir alle dafür sorgen, das Netz etwas zugänglicher für alle zu machen! \n" +
             "Vielen Dank für deinen Besuch auf meinem Profil.",
         qualification: "Zunächst möchte ich betonen, dass ich mich nicht nur theoretisch mit dem Thema auseinandergesetzt habe, sondern auch praktische Erfahrungen gesammelt habe. In meiner beruflichen Laufbahn habe ich zahlreiche Webprojekte betreut und dabei stets großen Wert auf die Umsetzung barrierefreier Designprinzipien gelegt. Ich habe eng mit Menschen mit unterschiedlichen Beeinträchtigungen zusammengearbeitet, um ihre Bedürfnisse und Anforderungen besser zu verstehen und in die Gestaltung einzubeziehen. Diese Erfahrungen haben mir einen tiefen Einblick in die Herausforderungen und besten Praktiken der Barrierefreiheit im Web gegeben.\n" +
@@ -73,6 +75,11 @@ export default {
       ]
     }
   },
+  async mounted(){
+    let data = await AuthService.getUser({id: this.$route.query.u})
+    data.msg.registered = moment(data.msg.registered).format('D.M.Y')
+    this.user = data.msg
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -100,6 +107,7 @@ export default {
     height: $image-small;
     margin-right: $bfs-l * 2;
     border-radius: 20px;
+    object-fit: cover;
   }
 
   h1 {
@@ -108,7 +116,7 @@ export default {
 
   h2 {
     margin: 0;
-    font-size: $bfs-xxs;
+    font-size: $bfs-xs;
     color: $mi-lila;
   }
 

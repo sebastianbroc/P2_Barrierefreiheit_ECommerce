@@ -45,6 +45,9 @@ export default {
   },
   mounted() {
     this.isMounted = true
+    if(this.$store.getters.isLoggedIn){
+      this.$router.push('/menu');
+    }
   },
   methods : {
     async login(){
