@@ -1,11 +1,11 @@
 <template>
-  <div class="content">
+  <div>
     <NavHeader :links=this.navLinks />
-      <div class="user has-gap">
+      <div class="user has-gap content" v-if="!editView">
         <div class="bio_wrapper">
           <img v-if="user.image" :src="user.image">
           <div class="bio">
-            <h1>{{user.name}}</h1>
+            <div style="display: flex; align-items: center; gap: 20px;"><h1>{{user.name}}</h1><img src="@/assets/images/edit.svg" alt="Profil bearbeiten" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.toggleEditView" id="editButton"></div>
             <span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span>
             <p>{{user.bio}}</p>
             <h2>Mitglied seit {{user.registered}}</h2>
@@ -26,6 +26,23 @@
           </div>
         </div>
       </div>
+    <div class="edit user has-gap content" v-if="editView">
+      <div class="bio_wrapper">
+        <div class="image-container"><img v-if="user.image" :src="user.image"><div class="img-overlay" @click="triggerImageUpload"><p>Bild ändern</p></div></div>
+        <input type="file" id="imageupload" style="display: none;" @change="loadFile">
+        <div class="bio">
+          <div style="display: flex; align-items: center; gap: 20px;"><input type="text" id="username" v-model="user.name"><img src="@/assets/images/save.svg" alt="Änderungen speichern" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.saveChanges" id="saveButton"><img src="@/assets/images/cancel.svg" alt="Änderungen verwerfen" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.$router.go()" id="cancelButton"></div>
+          <span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span>
+          <textarea rows="5" id="bio" v-model="user.bio"></textarea>
+        </div>
+      </div>
+      <div class="contributions">
+        <div class="expert_qualification">
+          <h1>Expertenqualifikation</h1>
+          <textarea v-model="user.qualification" rows="10" id="qualification"></textarea>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,6 +57,7 @@ export default {
   components: {NavHeader},
   data(){
     return {
+      editView: false,
       navLinks: [
         {
           link: "/guidelines",
@@ -75,10 +93,51 @@ export default {
       ]
     }
   },
+  methods: {
+    toggleEditView(){
+      if(this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id){
+        this.editView = !this.editView
+      }
+    },
+    triggerImageUpload(){
+      document.getElementById("imageupload").click()
+    },
+    loadFile(input){
+      if(input.target.files.length > 0){
+        const file = input.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (fileLoadedEvent) => {
+          //Entferne data:image/png;base64 Präfix
+           this.setImage(fileLoadedEvent.target.result)
+        }
+        reader.readAsDataURL(file)
+      }
+    },
+    setImage(base64){
+      this.user.image = base64
+    },
+    async saveChanges(){
+      let data = {
+        "id": this.$route.query.u,
+        "name": this.user.name,
+        "bio": this.user.bio,
+        "qualification": this.user.qualification,
+        "image": this.user.image
+      }
+
+      let result = await AuthService.updateUser(data)
+      if(result.msg == "Success"){
+        this.$router.go()
+      }
+    }
+  },
   async mounted(){
     let data = await AuthService.getUser({id: this.$route.query.u})
-    data.msg.registered = moment(data.msg.registered).format('D.M.Y')
-    this.user = data.msg
+    if(data && data.msg){
+      data.msg.registered = moment(data.msg.registered).format('D.M.Y')
+      this.user = data.msg
+    }
   }
 }
 </script>
@@ -94,18 +153,25 @@ export default {
 
   .bio_wrapper {
     display: flex;
+    gap: 50px;
   }
 
   .bio {
     display: flex;
     flex-direction: column;
     gap: $bfs-xs;
+
+    #editButton, #saveButton, #cancelButton {
+      width: 30px;
+      height: 30px;
+      filter: invert(15%) sepia(93%) saturate(4451%) hue-rotate(279deg) brightness(86%) contrast(102%);
+      cursor: pointer;
+    }
   }
 
   img {
     width: $image-small;
     height: $image-small;
-    margin-right: $bfs-l * 2;
     border-radius: 20px;
     object-fit: cover;
   }
@@ -185,6 +251,57 @@ export default {
           font-size: $bfs-xs;
         }
       }
+    }
+  }
+
+}
+
+.edit {
+  input, textarea {
+    border: solid 2px $mi-grau;
+    font-family: "Roboto Slab",sans-serif;
+
+    &#username {
+      font-size: 2rem;
+    }
+
+    &#bio, &#qualification {
+      font-family: "PT Sans", sans-serif;
+      font-size: 20px;
+    }
+  }
+
+  .expert_qualification {
+    width: 100% !important;
+  }
+
+  .image-container {
+    position: relative;
+    text-align: center;
+  }
+
+  .img-overlay {
+    border-radius: 20px;
+    position: absolute;
+    top: 49%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    width: 100%;
+    height: 98%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    p {
+      color: white;
+      padding: $bfs-s;
+    }
+
+    &:hover {
+      opacity: 1;
     }
   }
 

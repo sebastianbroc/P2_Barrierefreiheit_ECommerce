@@ -15,7 +15,7 @@
           <h3>Editor</h3>
           <p>Verfasse eine Guideline und teile neues Wissen mit der Welt.</p>
         </router-link>
-        <router-link to="/guidelines" class="section" id="user">
+        <router-link :to="'/user?u='+ this.$store.getters.getUser.id" class="section" id="user">
           <h3>Profil</h3>
           <p>Passe deine Daten an.</p>
         </router-link>

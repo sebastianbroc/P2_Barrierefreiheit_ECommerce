@@ -17,5 +17,10 @@ export default {
         return axios
             .post(url + 'returnUser/', data)
             .then(response => response.data)
+    },
+    updateUser(data) {
+        return axios
+            .post(url + 'updateUser/', data)
+            .then(response => response.data)
     }
 };

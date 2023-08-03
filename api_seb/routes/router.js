@@ -125,4 +125,24 @@ router.post('/returnUser', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
+router.post('/updateUser', userMiddleware.isLoggedIn, (req, res, next) => {
+    console.log(req.body)
+    db.query(
+        `UPDATE users SET name = ${db.escape(req.body.name)}, bio = ${db.escape(req.body.bio)}, image = ${db.escape(req.body.image)}, qualification = ${db.escape(req.body.qualification)} WHERE id = ${db.escape(req.body.id)};`,
+        (err, result) => {
+            // user does not exists
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                return res.status(200).send({
+                    msg: "Success"
+                });
+            }
+        }
+    );
+});
+
 module.exports = router;
