@@ -22,5 +22,15 @@ export default {
         return axios
             .post(url + 'updateUser/', data)
             .then(response => response.data)
+    },
+    getUserGuidelines(data) {
+        return axios
+            .post(url + 'userGuidelines/', data)
+            .then(response => response.data)
+    },
+    saveGuideline(data) {
+        return axios
+            .post(url + 'saveGuideline/', data)
+            .then(response => response.data)
     }
 };

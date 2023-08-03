@@ -5,8 +5,7 @@
         <div class="bio_wrapper">
           <img v-if="user.image" :src="user.image">
           <div class="bio">
-            <div style="display: flex; align-items: center; gap: 20px;"><h1>{{user.name}}</h1><img src="@/assets/images/edit.svg" alt="Profil bearbeiten" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.toggleEditView" id="editButton"></div>
-            <span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span>
+            <div style="display: flex; align-items: center; gap: 20px;"><h1>{{user.name}}</h1><span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span><img src="@/assets/images/edit.svg" alt="Profil bearbeiten" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.toggleEditView" id="editButton"></div>
             <p>{{user.bio}}</p>
             <h2>Mitglied seit {{user.registered}}</h2>
           </div>
@@ -32,7 +31,6 @@
         <input type="file" id="imageupload" style="display: none;" @change="loadFile">
         <div class="bio">
           <div style="display: flex; align-items: center; gap: 20px;"><input type="text" id="username" v-model="user.name"><img src="@/assets/images/save.svg" alt="Änderungen speichern" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.saveChanges" id="saveButton"><img src="@/assets/images/cancel.svg" alt="Änderungen verwerfen" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.$router.go()" id="cancelButton"></div>
-          <span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span>
           <textarea rows="5" id="bio" v-model="user.bio"></textarea>
         </div>
       </div>
@@ -118,17 +116,20 @@ export default {
       this.user.image = base64
     },
     async saveChanges(){
-      let data = {
-        "id": this.$route.query.u,
-        "name": this.user.name,
-        "bio": this.user.bio,
-        "qualification": this.user.qualification,
-        "image": this.user.image
-      }
+      //Double check that no one is trying to edit the profile of another person
+      if(this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id){
+        let data = {
+          "id": this.$route.query.u,
+          "name": this.user.name,
+          "bio": this.user.bio,
+          "qualification": this.user.qualification,
+          "image": this.user.image
+        }
 
-      let result = await AuthService.updateUser(data)
-      if(result.msg == "Success"){
-        this.$router.go()
+        let result = await AuthService.updateUser(data)
+        if(result.msg == "Success"){
+          this.$router.go()
+        }
       }
     }
   },

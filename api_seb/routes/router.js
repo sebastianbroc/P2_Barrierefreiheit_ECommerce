@@ -29,7 +29,7 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
                     } else {
                         // Hat verschlüsseltes PW => Zur Datenbank hinzufügen
                         db.query(
-                            `INSERT INTO users (id, name, email, password, registered) VALUES ('${uuid.v4()}', ${db.escape(
+                            `INSERT INTO users (name, email, password, registered) VALUES (${db.escape(
                                     req.body.name
                             )}, ${db.escape(
                                 req.body.email
@@ -106,7 +106,7 @@ router.post('/login', (req, res, next) => {
     );
 });
 
-router.post('/returnUser', userMiddleware.isLoggedIn, (req, res, next) => {
+router.post('/returnUser', (req, res, next) => {
     db.query(
         `SELECT * FROM users WHERE id = ${db.escape(req.body.id)};`,
         (err, result) => {
@@ -126,7 +126,6 @@ router.post('/returnUser', userMiddleware.isLoggedIn, (req, res, next) => {
 });
 
 router.post('/updateUser', userMiddleware.isLoggedIn, (req, res, next) => {
-    console.log(req.body)
     db.query(
         `UPDATE users SET name = ${db.escape(req.body.name)}, bio = ${db.escape(req.body.bio)}, image = ${db.escape(req.body.image)}, qualification = ${db.escape(req.body.qualification)} WHERE id = ${db.escape(req.body.id)};`,
         (err, result) => {
@@ -143,6 +142,46 @@ router.post('/updateUser', userMiddleware.isLoggedIn, (req, res, next) => {
             }
         }
     );
+});
+
+router.post('/userGuidelines', (req, res, next) => {
+    db.query(
+        `SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.author_id)};`,
+        (err, result) => {
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                return res.status(200).send({
+                    msg: result
+                });
+            }
+        }
+    );
+});
+
+router.post('/saveGuideline', (req, res, next) => {
+    if(req.body.guideline_id){
+        //TODO: update existing guideline
+    } else {
+        db.query(
+            `INSERT INTO guidelines (title, author_id, text, last_update) VALUES (${db.escape(req.body.title)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)}, ${db.escape(req.body.last_update)});`,
+            (err, result) => {
+                if (err) {
+                    throw err;
+                    return res.status(400).send({
+                        msg: err
+                    });
+                } else {
+                    return res.status(200).send({
+                        msg: "Success"
+                    });
+                }
+            }
+        );
+    }
 });
 
 module.exports = router;

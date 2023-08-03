@@ -38,6 +38,9 @@ import NavHeader from "@/components/navHeader.vue";
 export default {
   name: 'HomeView',
   components: {NavHeader},
+  mounted(){
+    if (this.$store.getters.isLoggedIn) this.$router.push("/menu")
+  },
   data(){
     return {
       navLinks: [

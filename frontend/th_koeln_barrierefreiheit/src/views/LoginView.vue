@@ -78,8 +78,12 @@ export default {
           password_repeat: this.register_password_repeat
         };
         const response = await AuthService.signUp(credentials);
-        console.log(response);
         this.msg = response.msg;
+        if(response.msg == "Registrierung erfolgreich!"){
+          this.login_email = this.register_email
+          this.login_password = this.register_password
+          this.login()
+        }
       } catch (error) {
         this.msg = error.response.data.msg;
       }

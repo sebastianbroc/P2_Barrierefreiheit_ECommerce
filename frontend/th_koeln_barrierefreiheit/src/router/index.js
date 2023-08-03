@@ -5,6 +5,8 @@ import GuidelineOverview from "../views/GuidelineOverview.vue";
 import GuidelineView from "../views/GuidelineView.vue";
 import UserView from "../views/UserView.vue";
 import MenuView from "../views/MenuView.vue";
+import TextEditor from "../views/TextEditor.vue";
+import UserGuidelineOverview from "../views/UserGuidelineOverview.vue";
 
 const routes = [
   {
@@ -36,6 +38,16 @@ const routes = [
     path: '/menu',
     name: 'menu',
     component: MenuView
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: TextEditor
+  },
+  {
+    path: '/yourguidelines',
+    name: 'yourguidelines',
+    component: UserGuidelineOverview
   }
 ]
 

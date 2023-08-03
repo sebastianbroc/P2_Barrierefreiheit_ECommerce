@@ -11,7 +11,7 @@
           <h3>Komponenten</h3>
           <p>Erhalte Zugriff auf eine breit gefächerte Bibliothek aus vorgefertigten Frontend-Komponenten, welche Barrierefreiheits-Richtlinien garantiert erfüllen!</p>
         </router-link>
-        <router-link to="/guidelines" class="section" id="editor">
+        <router-link to="/yourguidelines" class="section" id="editor">
           <h3>Editor</h3>
           <p>Verfasse eine Guideline und teile neues Wissen mit der Welt.</p>
         </router-link>
