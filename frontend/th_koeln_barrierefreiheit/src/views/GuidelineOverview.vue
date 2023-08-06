@@ -12,8 +12,9 @@
         </select>
         <!--<input type="text" name="search" id="search" placeholder="Suche">-->
       </div>
-      <div class="guideline_list">
-        <router-link :to="'/guideline?g=' + guideline.id" class="guideline" v-for="guideline in guidelines" :key="guideline.id" :value="guideline.id">
+      <div class="loading" v-if="!guidelines || guidelines.length == 0"></div>
+      <div class="guideline_list" v-if="guidelines && guidelines.length > 0">
+        <router-link :to="'/guideline?g=' + guideline.guideline_id" class="guideline" v-for="guideline in guidelines" :key="guideline.id" :value="guideline.id">
           <div class="top_row">
             <h2>{{guideline.title}}</h2>
             <div class="approvements">
@@ -37,6 +38,7 @@
 
 import NavHeader from "@/components/navHeader.vue";
 import { set, get } from 'idb-keyval'
+import AuthService from "@/services/AuthService";
 
 export default {
   name: 'HomeView',
@@ -170,19 +172,17 @@ export default {
       if(selected && selected === "examples"){
         this.guidelines = this.guidelineExamples
       } else { //get guidelines from api
-        let result = await fetch("https://api.burnoutstud.io/Guideline/GetAll", {mode: "cors"})
-        result = await result.json()
-        result[0].title = result[0].text
-        result[0].teaser = result[0].text
-        result[0].approvements = [];
-        this.guidelines = [result[0]]
+        let result = await AuthService.getGuidelines({"category": selected})
+        this.guidelines = result.msg
       }
     },
     setSelectField(selected) {
       let select = document.getElementById("category");
-      for(let i in select.options) {
-        if (select.options[i].value === selected) {
-          select.options[i].selected = true;
+      if(select){
+        for(let i in select.options) {
+          if (select.options[i].value === selected) {
+            select.options[i].selected = true;
+          }
         }
       }
     }

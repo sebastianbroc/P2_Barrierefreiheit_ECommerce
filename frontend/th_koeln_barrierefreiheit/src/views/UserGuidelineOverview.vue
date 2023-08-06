@@ -27,7 +27,7 @@
               <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt</h3>
             </div>
           </div>
-          <p>{{guideline.teaser}}</p>
+          <p>{{truncate(stripHTML(guideline.text))}}</p>
         </router-link>
       </div>
   </div>
@@ -77,6 +77,7 @@ export default {
 
         let result = await AuthService.getUserGuidelines(data)
         this.guidelines = result.msg
+        console.log(this.guidelines)
       }
     },
     setSelectField(selected) {
@@ -86,6 +87,16 @@ export default {
           select.options[i].selected = true;
         }
       }
+    },
+    stripHTML(html){
+      let tmp = document.createElement("div")
+      tmp.innerHTML = html
+      return tmp.textContent||tmp.innerText
+    },
+    truncate(string){
+      let teaserLength = 250
+      if(string.length <= teaserLength) return string
+      return string.slice(0, teaserLength) + "..."
     }
   }
 }

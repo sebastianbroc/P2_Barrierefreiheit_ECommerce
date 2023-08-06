@@ -23,6 +23,11 @@ export default {
             .post(url + 'updateUser/', data)
             .then(response => response.data)
     },
+    getGuidelines(data){
+        return axios
+            .post(url + 'guidelines/', data)
+            .then(response => response.data)
+    },
     getUserGuidelines(data) {
         return axios
             .post(url + 'userGuidelines/', data)
@@ -31,6 +36,11 @@ export default {
     saveGuideline(data) {
         return axios
             .post(url + 'saveGuideline/', data)
+            .then(response => response.data)
+    },
+    getGuideline(data) {
+        return axios
+            .post(url + 'guideline/', data)
             .then(response => response.data)
     }
 };

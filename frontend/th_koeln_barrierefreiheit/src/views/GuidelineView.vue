@@ -2,9 +2,10 @@
   <div class="guidelines">
     <NavHeader :links=this.navLinks />
     <div class="content has-gap">
-    <div class="guideline">
+      <div class="loading" v-if="!guideline"></div>
+    <div class="guideline" v-if="guideline">
       <div class="title"><h1>{{guideline.title}}</h1><img v-if="guideline.verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"></div>
-      <h2>von <router-link :to="'/user?u=' + guideline.author_id">{{guideline.author}}</router-link></h2>
+      <h2>von <router-link :to="'/user?u=' + guideline.author_id">{{guideline.name}}</router-link></h2>
       <p v-html="guideline.text" id="text"></p>
       <div class="bibliography" v-if="guideline.bibliography && guideline.bibliography.length > 0">
         <h3>Quellen</h3>
@@ -43,6 +44,7 @@ import NavHeader from "@/components/navHeader.vue";
 import moment from "moment";
 import hljs from "highlight.js";
 import 'highlight.js/styles/a11y-dark.css';
+import AuthService from "@/services/AuthService";
 
 export default {
   name: 'HomeView',
@@ -57,7 +59,8 @@ export default {
       ],
       activeAnnotation: null,
       timeOfAnnotationOpen: null,
-      guideline: {
+      guideline: null,
+      guidelineTEMPLATE: {
         title: "Optimieren des DOM für Screenreader",
         author: "Thomas Schmitz",
         author_id: 1,
@@ -96,12 +99,10 @@ export default {
     }
   },
   created(){
-    if(this.$route.query.g == 2){
-      //this.getGuideline()
-    } else if (this.$route.query.g == 3){
+    if (this.$route.query.g == 3){
       this.guideline = {
         title: "Guideline mit Code",
-        author: "Jim Halpert",
+        name: "Jim Halpert",
         author_id: 2,
         last_update: "26.03.2023",
         text: "HTML ist eine Auszeichnungssprache und muss von jedem professionellen Webentwickler beherrscht werden. Ein standardkonformes HTML-Grundgerüst erleichtert Software wie Browsern und Hilfsmitteln behinderter Nutzer die korrekte Aufbereitung einer Webseite. <a id='999' class='annotationLink'>Bei der Barrierefreiheit geht es vor allem um ein strukturiertes und linearisierbares HTML-Grundgerüst.</a> Erst wenn ein Dokument mit einer Auszeichnungssprache semantisch aufbereitet wird, lassen sich weitere Prinzipien von Webstandards, etwa die Trennung von Inhalt und Layout, effizient umsetzen. Diese Seite bietet einen knappen Überblick über verfügbare Layout-Techniken. HTML bietet drei grundlegende Layouttechniken, und hier folgt etwas Code: \n\n<pre><p>HTML</p><code><xmp><!DOCTYPE html>\n" +
@@ -155,7 +156,7 @@ export default {
     } else if (this.$route.query.g == 4) {
       this.guideline = {
         title: "Guideline mit Bild und Quellenangabe",
-        author: "Pam Beesly",
+        name: "Pam Beesly",
         author_id: 3,
         last_update: "12.04.2023",
         text: "Es gibt viele schöne Bilder auf dieser Welt, und diese sollen natürlich auch im System einbindbar sein. Dafür kann es verschiedenste Gründe geben, aber das Sprichwort <i>Ein Bild sagt mehr als tausend Worte</i> <b>[1]</b> wird nicht lügen, daher sollten Bilder definitiv problemlos in einer Guideline einbindbar sein. Für dieses Beispiel gehe ich davon aus, dass das Bild als Weblink existiert und nicht als Base64, aber das kann problemlos geändert werden, sollten wir hier eine andere Architekturentscheidung treffen.\n\n<img src='https://www.th-koeln.de/mam/bilder/hochschule/organisation/standorte/fittosize_705_0_234e2e5854dd50684360c17e33d3353f_th_koln_campus_gummersbach_sebastian_hopp.jpg'><b>[2]</b>\n\nDie TH Köln (Technische Hochschule Köln) ist eine renommierte deutsche Hochschule mit einem breiten Spektrum an Studiengängen in den Bereichen Technik, Wirtschaft, Sozialwissenschaften und Kultur. Mit modernen Einrichtungen, engagierten Dozenten und einer praxisorientierten Ausbildung bietet die TH Köln ihren Studierenden eine erstklassige akademische Erfahrung. Durch enge Verbindungen zur Industrie und zahlreiche Forschungsprojekte ermöglicht die TH Köln ihren Absolventen einen nahtlosen Übergang in die Arbeitswelt. Entdecke die vielfältigen Möglichkeiten, die die TH Köln bietet, um deine beruflichen Ziele zu erreichen und deine Leidenschaft in die Tat umzusetzen.",
@@ -178,6 +179,8 @@ export default {
           }
         ]
       }
+    } else {
+      this.getGuideline()
     }
   },
   mounted() {
@@ -193,9 +196,11 @@ export default {
   },
   methods: {
     async getGuideline(){
-        let result = await fetch("http://37.120.175.2:5279/Guideline", {mode: "cors"})
-        result = await result.json()
-        this.guideline = result[0]
+      let result = await AuthService.getGuideline({"guideline_id": this.$route.query.g})
+      if(result.msg){
+        result.msg.last_update = moment(result.msg.last_update).format("DD.MM.Y")
+        this.guideline = result.msg
+      }
     },
     getAnnotation(input){
       console.log(input)

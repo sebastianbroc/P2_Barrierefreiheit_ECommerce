@@ -144,6 +144,42 @@ router.post('/updateUser', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
+router.post('/guidelines', (req, res, next) => {
+    if(req.body && req.body.category && req.body.category != "all" && req.body.category != ""){
+        db.query(
+            `SELECT * FROM guidelines WHERE category = ${db.escape(req.body.category)};`,
+            (err, result) => {
+                if (err) {
+                    throw err;
+                    return res.status(400).send({
+                        msg: err
+                    });
+                } else {
+                    return res.status(200).send({
+                        msg: result
+                    });
+                }
+            }
+        );
+    } else {
+        db.query(
+            `SELECT * FROM guidelines;`,
+            (err, result) => {
+                if (err) {
+                    throw err;
+                    return res.status(400).send({
+                        msg: err
+                    });
+                } else {
+                    return res.status(200).send({
+                        msg: result
+                    });
+                }
+            }
+        );
+    }
+});
+
 router.post('/userGuidelines', (req, res, next) => {
     db.query(
         `SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.author_id)};`,
@@ -182,6 +218,24 @@ router.post('/saveGuideline', (req, res, next) => {
             }
         );
     }
+});
+
+router.post('/guideline', (req, res, next) => {
+    db.query(
+        `SELECT * FROM guidelines INNER JOIN users ON author_id = users.id WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+        (err, result) => {
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                return res.status(200).send({
+                    msg: result[0]
+                });
+            }
+        }
+    );
 });
 
 module.exports = router;
