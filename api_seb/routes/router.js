@@ -198,9 +198,23 @@ router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
-router.post('/saveGuideline', userMiddleware.isLoggedIn, (req, res, next) => {
+router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, userMiddleware.allowedToUpdateGuideline, (req, res, next) => {
     if(req.body.guideline_id){
-        //TODO: update existing guideline
+        db.query(
+            `UPDATE guidelines SET title = ${db.escape(req.body.title)}, text = ${db.escape(req.body.text)}, last_update = ${db.escape(req.body.last_update)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+            (err, result) => {
+                if (err) {
+                    throw err;
+                    return res.status(400).send({
+                        msg: err
+                    });
+                } else {
+                    return res.status(200).send({
+                        msg: "Success"
+                    });
+                }
+            }
+        );
     } else {
         db.query(
             `INSERT INTO guidelines (title, author_id, text, last_update) VALUES (${db.escape(req.body.title)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)}, ${db.escape(req.body.last_update)});`,

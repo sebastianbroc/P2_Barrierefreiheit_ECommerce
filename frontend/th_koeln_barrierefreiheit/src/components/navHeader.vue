@@ -11,7 +11,7 @@
         </svg>
       </button>
       <div class="m-navHead--text">
-        <router-link :to="'/'" >mi&nbsp;</router-link>
+        <router-link :to="'/'" class="hide_on_small_vp">mi&nbsp;</router-link>
         <span class="m-navHead--logoSlash" v-for="link in this.links" :key="link.link" :value="link.link">/</span>
         <span class="m-navHead--logoSlug" v-for="link in this.links" :key="link.link" :value="link.link">
           <router-link :to=link.link>&nbsp;{{link.name}}</router-link>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser" class="user">
-      <p>Willkommen <router-link :to="'/user?u='+ this.$store.getters.getUser.id"><b>{{this.$store.getters.getUser.name}}</b></router-link>!</p>
+      <p>Willkommen<br><router-link :to="'/user?u='+ this.$store.getters.getUser.id"><b>{{this.$store.getters.getUser.name}}</b></router-link>!</p>
       <p class="logout" @click="logout">Logout</p>
     </div>
   </div>
@@ -54,6 +54,7 @@ export default {
 <style lang="scss" scoped>
 .m-navHead {
   justify-content: space-between;
+  white-space: nowrap;
 }
 
 .left-wrapper {
@@ -79,6 +80,16 @@ export default {
 
   a {
     color: $mi-lila;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .hide_on_small_vp {
+    display: none;
+  }
+
+  .m-navHead--logoSlug {
+    font-size: $bfs-xl;
   }
 }
 </style>

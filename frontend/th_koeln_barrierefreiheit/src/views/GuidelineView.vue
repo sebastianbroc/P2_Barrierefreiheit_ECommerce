@@ -4,7 +4,7 @@
     <div class="content has-gap">
       <div class="loading" v-if="!guideline"></div>
     <div class="guideline" v-if="guideline">
-      <div class="title"><h1>{{guideline.title}}</h1><img v-if="guideline.verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"></div>
+      <div class="title"><h1>{{guideline.title}}</h1><img v-if="guideline.verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"><router-link :to="'/editor?g=' + this.$route.query.g"><img src="@/assets/images/edit.svg" alt="Diese Guideline bearbeiten" v-if="this.$store.getters.isLoggedIn && this.guideline.author_id == this.$store.getters.getUser.id" id="editButton"></router-link></div>
       <h2>von <router-link :to="'/user?u=' + guideline.author_id">{{guideline.name}}</router-link></h2>
       <p v-html="guideline.text" id="text"></p>
       <div class="bibliography" v-if="guideline.bibliography && guideline.bibliography.length > 0">
@@ -32,7 +32,7 @@
         <div class="approvers">
           <router-link v-for="approvement in guideline.approvements" :to="'/user?u=' + approvement.id" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
         </div>
-        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && !this.alreadyApproved"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
+        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && !this.alreadyApproved && this.guideline.author_id != this.$store.getters.getUser.id"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
         <button id="approve_button" class="revert" @click="revertApproval" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && this.alreadyApproved"><img src="@/assets/images/cancel.svg" style="filter: invert(100%);">Bestätigung zurückziehen</button>
       </div>
     </div>
@@ -194,14 +194,12 @@ export default {
         annoLinks[i].addEventListener("click", this.getAnnotation);
       }
     }
-
-    hljs.highlightAll();
   },
   methods: {
     async getGuideline(){
       let result = await AuthService.getGuideline({"guideline_id": this.$route.query.g})
       if(result.msg){
-        result.msg.last_update = moment(result.msg.last_update).format("DD.MM.Y")
+        result.msg.last_update = moment(result.msg.last_update).format("DD.MM.Y, HH:mm")
         this.guideline = result.msg
         this.guideline.approvements.forEach(approvement => {
           if(approvement.id == this.$store.getters.getUser.id){
@@ -330,6 +328,9 @@ export default {
         this.$router.go()
       }
     }
+  },
+  updated(){
+    hljs.highlightAll()
   }
 }
 </script>
@@ -348,7 +349,7 @@ export default {
 
   h1 {
     color: $mi-lila;
-    margin-bottom: $xs;
+    margin: 0;
   }
 
   h2 {
@@ -374,6 +375,7 @@ export default {
   .title {
     display: flex;
     align-items: center;
+    margin-bottom: $xs;
 
     img {
       margin-left: $l;

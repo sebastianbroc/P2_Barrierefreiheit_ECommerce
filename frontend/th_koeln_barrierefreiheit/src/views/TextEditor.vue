@@ -2,13 +2,12 @@
   <div>
     <NavHeader :links=this.navLinks />
     <div class="editor content has-gap">
-      <div class="flex">
+      <div class="header flex">
         <input type="text" name="guidelineTitle" v-model="guidelineTitle" placeholder="Titel..." id="guidelineTitle">
         <div class="actions">
           <img src="@/assets/images/save.svg" alt="Speichern"  id="saveButton" @click="save">
         </div>
       </div>
-      <input type="text" name="guidelineTitle" v-model="authorName" placeholder="Autorenname..." id="guidelineAuthor">
       <!--<input type="text" v-model="position" @change="changeCursorPosition">-->
       <VueEditor
           ref="editor"
@@ -42,6 +41,7 @@ export default {
   },
   data() {
     return {
+      existingGuideline: (!this.$route.query.new && this.$route.query.g) ? true : false,
       navLinks: [
         {
           link: "/menu",
@@ -77,19 +77,40 @@ export default {
   },
   async mounted() {
     //this.webSocketInvoke();
+
+    if(this.existingGuideline){
+      await this.getGuideline()
+    }
   },
   methods: {
+    async getGuideline(){
+      let data = {
+        "guideline_id": this.$route.query.g
+      }
+
+      let result = await AuthService.getGuideline(data)
+
+      this.guidelineTitle = result.msg.title
+      this.editorContent = result.msg.text.replace('<pre><p>Code</p><code><xmp>', '<pre class="ql-syntax" spellcheck="false">').replace('</xmp></code></pre>', '</pre>')
+
+    },
     async save(){
       let data = {
         "author_id": this.$store.getters.getUser.id,
         "title": this.guidelineTitle,
         "last_update": moment().format("Y-MM-DD HH:MM:s"),
-        "text": this.editorContent
+        "text": this.editorContent.replace('<pre class="ql-syntax" spellcheck="false">', '<pre><p>Code</p><code><xmp>').replace('</pre>', '</xmp></code></pre>')
       }
 
+      if(this.existingGuideline) data.guideline_id = this.$route.query.g
       let result = await AuthService.saveGuideline(data)
+
       if(result.msg == "Success"){
-        this.$router.push("/yourguidelines")
+        if(this.existingGuideline){
+          this.$router.push("/guideline?g=" + this.$route.query.g)
+        } else {
+          this.$router.push("/yourguidelines")
+        }
       } else {
         console.log(result)
       }
@@ -198,6 +219,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.header{
+  margin-bottom: $bfs-l;
 }
 
 .actions {
