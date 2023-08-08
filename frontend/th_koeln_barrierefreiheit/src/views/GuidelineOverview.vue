@@ -19,7 +19,7 @@
             <h2>{{guideline.title}}</h2>
             <div class="approvements">
               <div class="approvement_list" v-if="guideline.approvements">
-                <router-link v-for="approvement in guideline.approvements.slice(0, 5)" :to="'/user?u=' + approvement.userId" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
+                <router-link v-for="approvement in guideline.approvements.slice(0, 5)" :to="'/user?u=' + approvement.id" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
                 <img v-if="guideline.approvements && guideline.approvements.length >= 5" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert">
                 <img v-if="!guideline.approvements || guideline.approvements.length < 1" src="@/assets/images/warning.png" class="no_approvements" title="Diese Guideline wurde noch nicht bestätigt">
               </div>

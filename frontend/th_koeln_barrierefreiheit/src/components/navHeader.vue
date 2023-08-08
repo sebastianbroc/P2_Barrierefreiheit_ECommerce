@@ -39,7 +39,7 @@ export default {
     },
   },
   beforeMount(){
-    if(!this.$store.getters.isLoggedIn || !this.$store.getters.getUser){
+    if(this.$store.getters.isLoggedIn && !this.$store.getters.getUser){
       this.logout()
     }
   },
