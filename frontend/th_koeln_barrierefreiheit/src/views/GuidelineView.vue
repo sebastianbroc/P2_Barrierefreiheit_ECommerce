@@ -499,15 +499,15 @@ export default {
 }
 
  .approvements {
-   align-self: end;
+   align-self: flex-end;
    display: flex;
-   align-items: end;
+   align-items: flex-end;
    gap: $bfs-s;
    flex-direction: column;
    margin-bottom: $bfs-xl * 3;
 
    h3 {
-     align-self: end;
+     align-self: flex-end;
      font-size: $bfs-s;
      color: $mi-lila;
      margin: 0;

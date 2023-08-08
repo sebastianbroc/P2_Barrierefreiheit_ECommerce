@@ -27,7 +27,7 @@
               <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt</h3>
             </div>
           </div>
-          <p>{{guideline.teaser}}</p>
+          <p>{{truncate(stripHTML(guideline.text))}}</p>
         </router-link>
       </div>
   </div>
@@ -185,6 +185,16 @@ export default {
           }
         }
       }
+    },
+    stripHTML(html){
+      let tmp = document.createElement("div")
+      tmp.innerHTML = html
+      return tmp.textContent||tmp.innerText
+    },
+    truncate(string){
+      let teaserLength = 250
+      if(string.length <= teaserLength) return string
+      return string.slice(0, teaserLength) + "..."
     }
   }
 }
@@ -297,6 +307,9 @@ a:hover {
 
       img {
         width: $l * 1.5;
+        height: $l * 1.5;
+        object-fit: cover;
+        border-radius: 100%;
         margin-left: 5px;
         overflow: hidden;
       }

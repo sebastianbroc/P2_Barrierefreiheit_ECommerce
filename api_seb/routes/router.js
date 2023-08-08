@@ -171,9 +171,24 @@ router.post('/guidelines', (req, res, next) => {
                         msg: err
                     });
                 } else {
-                    return res.status(200).send({
-                        msg: result
-                    });
+                    for(let i = 0; i < result.length; i++){
+                        db.query(`SELECT * FROM approvements INNER JOIN users ON approvements.expert_id = users.id WHERE approvements.guideline_id = ${db.escape(result[i].guideline_id)};`,
+                            (err, result_approvements) => {
+                                if(err){
+                                    console.log(err)
+                                }
+                                if (!err){
+                                    result[i].approvements = result_approvements
+
+                                    //Prevent race conditions by returning in the callback of the query
+                                    if(i == result.length - 1){
+                                        return res.status(200).send({
+                                            msg: result
+                                        });
+                                    }
+                                }
+                            })
+                    }
                 }
             }
         );
