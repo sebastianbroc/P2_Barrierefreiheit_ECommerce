@@ -180,7 +180,7 @@ router.post('/guidelines', (req, res, next) => {
     }
 });
 
-router.post('/userGuidelines', (req, res, next) => {
+router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
     db.query(
         `SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.author_id)};`,
         (err, result) => {
@@ -198,7 +198,7 @@ router.post('/userGuidelines', (req, res, next) => {
     );
 });
 
-router.post('/saveGuideline', (req, res, next) => {
+router.post('/saveGuideline', userMiddleware.isLoggedIn, (req, res, next) => {
     if(req.body.guideline_id){
         //TODO: update existing guideline
     } else {
@@ -224,6 +224,39 @@ router.post('/guideline', (req, res, next) => {
     db.query(
         `SELECT * FROM guidelines INNER JOIN users ON author_id = users.id WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
         (err, result) => {
+            if (err || result.length == 0) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                //get approvements
+                db.query(
+                    `SELECT * FROM approvements INNER JOIN users ON expert_id = users.id WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+                    (err, result_approvements) => {
+                        if (err) {
+                            throw err;
+                            return res.status(400).send({
+                                msg: err
+                            });
+                        } else {
+                            result[0].approvements = result_approvements
+
+                            return res.status(200).send({
+                                msg: result[0]
+                            });
+                        }
+                    }
+                );
+            }
+        }
+    );
+});
+
+router.post('/approveGuideline', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, (req, res, next) => {
+    db.query(
+        `INSERT INTO approvements (expert_id, guideline_id) VALUES (${db.escape(req.body.expert_id)}, ${db.escape(req.body.guideline_id)});`,
+        (err, result) => {
             if (err) {
                 throw err;
                 return res.status(400).send({
@@ -231,7 +264,25 @@ router.post('/guideline', (req, res, next) => {
                 });
             } else {
                 return res.status(200).send({
-                    msg: result[0]
+                    msg: "Success"
+                });
+            }
+        }
+    );
+});
+
+router.post('/revertApproval', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, (req, res, next) => {
+    db.query(
+        `DELETE FROM approvements WHERE expert_id = ${db.escape(req.body.expert_id)} AND guideline_id = ${db.escape(req.body.guideline_id)};`,
+        (err, result) => {
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                return res.status(200).send({
+                    msg: "Success"
                 });
             }
         }

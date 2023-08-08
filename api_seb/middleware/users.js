@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const db = require("../lib/db");
 
 module.exports = {
     validateRegister: (req, res, next) => {
@@ -53,6 +54,40 @@ module.exports = {
         } catch (err) {
             return res.status(401).send({
                 msg: 'Ihre Sitzung ist nicht valide oder abgelaufen!'
+            });
+        }
+    },
+    validateExpertStatus: (req, res, next) => {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            const decoded = jwt.verify(
+                token,
+                'SECRETKEY'
+            );
+            req.userData = decoded;
+
+            db.query(
+                `SELECT is_expert FROM users WHERE id = ${db.escape(req.userData.userId)};`,
+                (err, result) => {
+                    if (err) {
+                        throw err;
+                        return res.status(400).send({
+                            msg: err
+                        });
+                    } else {
+                        if(result[0].is_expert){
+                            next()
+                        } else {
+                            return res.status(401).send({
+                                msg: 'Für die angefragte Aktion besteht keine Berechtigung!'
+                            });
+                        }
+                    }
+                }
+            );
+        } catch(e){
+            return res.status(401).send({
+                msg: 'Für die angefragte Aktion besteht keine Berechtigung!'
             });
         }
     }

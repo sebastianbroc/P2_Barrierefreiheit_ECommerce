@@ -42,5 +42,15 @@ export default {
         return axios
             .post(url + 'guideline/', data)
             .then(response => response.data)
+    },
+    approveGuideline(data) {
+        return axios
+            .post(url + 'approveGuideline/', data)
+            .then(response => response.data)
+    },
+    revertApproval(data) {
+        return axios
+            .post(url + 'revertApproval/', data)
+            .then(response => response.data)
     }
 };

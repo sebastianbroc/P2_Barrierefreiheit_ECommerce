@@ -18,7 +18,7 @@
 			</span>
       </div>
     </div>
-    <div v-if="this.$store.getters.isLoggedIn" class="user">
+    <div v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser" class="user">
       <p>Willkommen <router-link :to="'/user?u='+ this.$store.getters.getUser.id"><b>{{this.$store.getters.getUser.name}}</b></router-link>!</p>
       <p class="logout" @click="logout">Logout</p>
     </div>
@@ -37,6 +37,11 @@ export default {
       this.$store.dispatch('logout');
       this.$router.push('/');
     },
+  },
+  beforeMount(){
+    if(!this.$store.getters.isLoggedIn || !this.$store.getters.getUser){
+      this.logout()
+    }
   },
   async mounted(){
     if(this.$store.getters.isLoggedIn){

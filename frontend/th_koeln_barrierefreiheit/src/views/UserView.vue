@@ -28,7 +28,7 @@
       </div>
     <div class="edit user has-gap content" v-if="editView && user">
       <div class="bio_wrapper">
-        <div class="image-container"><img v-if="user.image" :src="user.image"><div class="img-overlay" @click="triggerImageUpload"><p>Bild ändern</p></div></div>
+        <div class="image-container"><img v-if="user.image" :src="user.image"><div class="img-overlay" @click="triggerImageUpload" :class="{active: !user.image}"><p>Bild ändern</p></div></div>
         <input type="file" id="imageupload" style="display: none;" @change="loadFile">
         <div class="bio">
           <div style="display: flex; align-items: center; gap: 20px;"><input type="text" id="username" v-model="user.name"><img src="@/assets/images/save.svg" alt="Änderungen speichern" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.saveChanges" id="saveButton"><img src="@/assets/images/cancel.svg" alt="Änderungen verwerfen" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.$router.go()" id="cancelButton"></div>
@@ -293,6 +293,13 @@ export default {
 
     &:hover {
       opacity: 1;
+    }
+
+    &.active {
+      position: relative;
+      opacity: 1;
+      width: $image-small;
+      height: $image-small;
     }
   }
 
