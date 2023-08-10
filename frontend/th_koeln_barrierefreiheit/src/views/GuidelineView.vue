@@ -12,6 +12,15 @@
         <p v-for="source in guideline.bibliography" :key="source.id" :value="source.id"><b>[{{source.id}}]</b> {{source.text}}</p>
       </div>
       <p id="last_update">letzte Aktualisierung: {{guideline.last_update}}</p>
+      <div class="approvements">
+        <h3 v-if="guideline.approvements && guideline.approvements.length > 0">durch <b>{{guideline.approvements.length}}</b> Experten bestätigt</h3>
+        <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt</h3>
+        <div class="approvers">
+          <router-link v-for="approvement in guideline.approvements" :to="'/user?u=' + approvement.id" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
+        </div>
+        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && !this.alreadyApproved && this.guideline.author_id != this.$store.getters.getUser.id"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
+        <button id="approve_button" class="revert" @click="revertApproval" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && this.alreadyApproved"><img src="@/assets/images/cancel.svg" style="filter: invert(100%);">Bestätigung zurückziehen</button>
+      </div>
       <div id="annotation">
         <div v-if="activeAnnotation">
           <img :src="activeAnnotation.image">
@@ -26,14 +35,13 @@
           <div class="vote_button" id="downvote" @click="handleAnnotationVote"></div>
         </div>
       </div>
-      <div class="approvements">
-        <h3 v-if="guideline.approvements && guideline.approvements.length > 0">durch <b>{{guideline.approvements.length}}</b> Experten bestätigt</h3>
-        <h3 v-if="guideline.approvements && guideline.approvements.length < 1">noch nicht bestätigt</h3>
-        <div class="approvers">
-          <router-link v-for="approvement in guideline.approvements" :to="'/user?u=' + approvement.id" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
+      <div id="annotation_editor" :class="{active: selectedText}">
+        <h2>Annotation Verfassen</h2>
+        <textarea rows="10" v-model="annotationText"></textarea>
+        <div style="display: flex; gap: 10px;">
+          <button class="send_annotation_button cancel">Abbruch</button>
+          <button class="send_annotation_button" @click="saveAnnotation">Senden</button>
         </div>
-        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && !this.alreadyApproved && this.guideline.author_id != this.$store.getters.getUser.id"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
-        <button id="approve_button" class="revert" @click="revertApproval" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && this.alreadyApproved"><img src="@/assets/images/cancel.svg" style="filter: invert(100%);">Bestätigung zurückziehen</button>
       </div>
     </div>
   </div>
@@ -47,6 +55,7 @@ import moment from "moment";
 import hljs from "highlight.js";
 import 'highlight.js/styles/a11y-dark.css';
 import AuthService from "@/services/AuthService";
+import { debounce } from 'debounce';
 
 export default {
   name: 'HomeView',
@@ -59,8 +68,10 @@ export default {
           name: "guidelines"
         }
       ],
+      selectedText: null,
       activeAnnotation: null,
       timeOfAnnotationOpen: null,
+      annotationText: null,
       guideline: null,
       guidelineTEMPLATE: {
         title: "Optimieren des DOM für Screenreader",
@@ -188,12 +199,13 @@ export default {
   },
   mounted() {
     let annoLinks = document.getElementsByClassName("annotationLink")
-
     for(let i in annoLinks){
       if (typeof(annoLinks[i]) === "object"){
         annoLinks[i].addEventListener("click", this.getAnnotation);
       }
     }
+
+    document.addEventListener("selectionchange", debounce(this.getSelectionText,500));
   },
   methods: {
     async getGuideline(){
@@ -326,6 +338,28 @@ export default {
 
       if(result.msg == "Success"){
         this.$router.go()
+      }
+    },
+    async saveAnnotation(){
+      let data = {
+        "guideline_id" : this.$route.query.g,
+        "author_id": this.$store.getters.getUser.id,
+        "text": this.annotationText,
+        "selected_text": this.selectedText
+      }
+
+      let result = await AuthService.saveAnnotation(data)
+      console.log(result)
+    },
+    getSelectionText() {
+      if(!this.selectedText){
+        let text = "";
+        if (window.getSelection) {
+          text = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != "Control") {
+          text = document.selection.createRange().text;
+        }
+        this.selectedText = text
       }
     }
   },
@@ -494,6 +528,50 @@ export default {
       position:absolute;
       top:-10px;
       left:50%;
+    }
+  }
+
+  #annotation_editor {
+    background: $mi-black;
+    padding: $bfs;
+    border-radius: $bfs-xxs;
+    display: flex;
+    flex-direction: column;
+    gap: $xs;
+    position: fixed;
+    bottom: -40%;
+    width: 80%;
+    transition: 0.3s ease;
+
+    &.active {
+      bottom: 5%;
+    }
+
+    h2 {
+      color: white;
+      margin: 0;
+    }
+
+    textarea {
+      width: 95%;
+      font-family: "PT Sans", sans-serif;
+      font-size: 0.7rem;
+    }
+
+    .send_annotation_button {
+      cursor: pointer;
+      font-family: 'Roboto Slab', sans-serif;
+      font-weight: bold;
+      background: $mi-lila;
+      color: $mi-hellgrau;
+      padding: $xs;
+      align-items: center;
+      width: 30%;
+      max-width: 100px;
+
+      &.cancel {
+        background: $mi-pink;
+      }
     }
   }
 }

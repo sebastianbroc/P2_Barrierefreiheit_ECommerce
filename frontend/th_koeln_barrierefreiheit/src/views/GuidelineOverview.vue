@@ -54,7 +54,7 @@ export default {
       guidelines: [],
       guidelineExamples: [
         {
-          id: 1,
+          guideline_id: 1,
           title: "Optimieren des DOM für Screenreader",
           teaser: "Da viele Menschen mit visuellen Einschränkungen zur Interaktion mit Webseiten sogenannte Screenreader verwenden, ist es von großer Relevanz, das Document Object Model einer Webseite mit diesem Fakt im Hinterkopf zu gestalten. Diese Guideline erläutert, auf welche Gegebenheiten dabei geachtet werden sollte, um eine Webseite für die Nutzung anhand eines Screenreaders zu optimieren.",
           approvements:[
@@ -86,7 +86,7 @@ export default {
           ]
         },
         {
-          id: 2,
+          guideline_id: 2,
           title: "Störfaktoren vermeiden",
           teaser: "Die Fähigkeit der Nutzer, Inhalte zu lesen und zu bedienen, darf keinesfalls beeinträchtigt werden, wenn die Seite barrierefrei sein soll. In der Praxis werden Seiten oft \"im Wesentlichen barrierefrei\" oder \"barrierearm\" umgesetzt, aber manchmal sind genau die Aspekte, die nicht barrierefrei umgesetzt werden, so problematisch, dass der gesamte Webauftritt nicht genutzt werden kann.",
           approvements:[
@@ -103,7 +103,7 @@ export default {
           ]
         },
         {
-          id: 3,
+          guideline_id: 3,
           title: "Beispielguideline mit Code-Einbindung",
           teaser: "Nutzer müssen auf der Grundlage der Web Content Accessibility Guidelines (WCAG) 2.0 die Möglichkeit haben, blinkende Elemente in einen statischen Zustand versetzen zu können. Blinken bedeutet, dass ein Inhalt zwischen zwei oder mehr visuellen Zuständen wechselt und kann sehr viele Situationen betreffen. In diesem Beitrag wird ein kleiner JavaScript geboten, um blinkenden Text standardkonform anzuzeigen.",
           approvements:[
@@ -125,7 +125,7 @@ export default {
           ]
         },
         {
-          id: 4,
+          guideline_id: 4,
           title: "Beispielguideline mit Bild und Quellenangabe",
           teaser: "Im Gegensatz zu Druckmedien, die in der Regel aus Inhalt und einem vorangestellten Inhaltsverzeichnis bestehen, wird auf Webseiten die Navigation gleich mit dem Inhalt geliefert. Fast alle Webseiten bestehen aus Inhalt und mindestens einem Navigationsbereich mit Links zu anderen Seiten des gleichen Anbieters. Je nach Webauftritt können die Navigationsbereiche sehr umfangreich werden.",
           approvements : [
@@ -137,7 +137,7 @@ export default {
           ]
         },
         {
-          id: 5,
+          guideline_id: 5,
           title: "Reingelegt — Per Tastatur in die Falle",
           teaser: "Die Tastaturbedienung gehört zu den entscheidenden Kriterien des barrierefreien Webdesigns. Die Vermeidung von Tastaturfallen wird dabei in den Web Content Accessibility Guidelines (WCAG) 2.0 eine besondere Gewichtung gegeben. Die Vermeidung von Tastaturfallen ist eine von vier Erfolgskriterien, die für eine Konformität immer erfüllt sein müssen.",
           approvements: [
@@ -145,7 +145,7 @@ export default {
           ]
         },
         {
-          id: 6,
+          guideline_id: 6,
           title: "Kontextänderungen und die Tastaturbedienung",
           teaser: "Es gibt viele Aspekte der Tastaturbedienung, etwa die vollständige Funktionalität bei Links, Formularen und Widgets, die Fokus-Reihenfolge oder die Sichtbarkeit des Fokus. Natürlich geht es zum einen darum, dass jede Funktion mit der Tastatur aktiviert bzw. ausgewählt werden kann, aber es geht zum anderen auch darum, dass bei der Bedienung einer Webseite mit der Tastatur keine unvorhersehbaren Aktionen ausgelöst werden.",
           approvements: [

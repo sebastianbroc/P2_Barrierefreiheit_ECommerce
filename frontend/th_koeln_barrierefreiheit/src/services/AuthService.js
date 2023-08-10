@@ -52,5 +52,10 @@ export default {
         return axios
             .post(url + 'revertApproval/', data)
             .then(response => response.data)
+    },
+    saveAnnotation(data) {
+        return axios
+            .post(url + 'saveAnnotation/', data)
+            .then(response => response.data)
     }
 };

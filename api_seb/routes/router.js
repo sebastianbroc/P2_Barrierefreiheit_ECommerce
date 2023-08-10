@@ -213,23 +213,25 @@ router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
-router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, userMiddleware.allowedToUpdateGuideline, (req, res, next) => {
+router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, (req, res, next) => {
     if(req.body.guideline_id){
-        db.query(
-            `UPDATE guidelines SET title = ${db.escape(req.body.title)}, text = ${db.escape(req.body.text)}, last_update = ${db.escape(req.body.last_update)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
-            (err, result) => {
-                if (err) {
-                    throw err;
-                    return res.status(400).send({
-                        msg: err
-                    });
-                } else {
-                    return res.status(200).send({
-                        msg: "Success"
-                    });
+        userMiddleware.allowedToUpdateGuideline(req, res, () => {
+            db.query(
+                `UPDATE guidelines SET title = ${db.escape(req.body.title)}, text = ${db.escape(req.body.text)}, last_update = ${db.escape(req.body.last_update)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+                (err, result) => {
+                    if (err) {
+                        throw err;
+                        return res.status(400).send({
+                            msg: err
+                        });
+                    } else {
+                        return res.status(200).send({
+                            msg: "Success"
+                        });
+                    }
                 }
-            }
-        );
+            );
+        })
     } else {
         db.query(
             `INSERT INTO guidelines (title, author_id, text, last_update) VALUES (${db.escape(req.body.title)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)}, ${db.escape(req.body.last_update)});`,
@@ -313,6 +315,47 @@ router.post('/revertApproval', userMiddleware.isLoggedIn, userMiddleware.validat
                 return res.status(200).send({
                     msg: "Success"
                 });
+            }
+        }
+    );
+});
+
+router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
+
+
+
+    db.query(
+        `INSERT INTO annotations (guideline_id, author_id, annotation_text) VALUES (${db.escape(req.body.guideline_id)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)});`,
+        (err, result) => {
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                db.query(`SELECT text from guidelines WHERE guideline_id = ${db.escape(req.body.guideline_id)};`, (errG, resG) => {
+                    if(errG){
+                        console.log(errG)
+                    }else {
+                        let guidelineText = resG[0].text
+                        console.log(guidelineText.replace(db.escape(req.body.selected_text).replaceAll("'", ""), "<a id='" + result.insertId + "' class='annotationLink'>" + db.escape(req.body.selected_text) + "</a>" ))
+                        console.log(db.escape(req.body.selected_text).replaceAll("'", ""))
+                        db.query(`UPDATE guidelines SET text = '${guidelineText.replace(db.escape(req.body.selected_text).replaceAll("'", ""), "<a id=" + result.insertId + " class=annotationLink>" + db.escape(req.body.selected_text).replaceAll("'", "") + "</a>" )}' WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+                            (errInner, resultInner) => {
+                                if (errInner){
+                                    console.log(errInner)
+                                    return res.status(400).send({
+                                        msg: errInner
+                                    });
+                                } else {
+                                    return res.status(200).send({
+                                        msg: "Success",
+                                        insertedId: result.insertId
+                                    });
+                                }
+                        })
+                    }
+                })
             }
         }
     );
