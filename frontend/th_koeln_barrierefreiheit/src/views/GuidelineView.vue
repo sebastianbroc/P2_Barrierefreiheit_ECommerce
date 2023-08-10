@@ -340,7 +340,9 @@ export default {
       }
 
       let result = await AuthService.saveAnnotation(data)
-      console.log(result)
+      if(result.msg == "Success"){
+        this.$router.go()
+      }
     },
     getSelectionText() {
       if(!this.selectedText){
