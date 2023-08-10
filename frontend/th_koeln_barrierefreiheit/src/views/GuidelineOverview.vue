@@ -5,9 +5,9 @@
       <div class="navbar">
         <select name="category" id="category" @change="getGuidelines">
           <option value="" selected>Alle Kategorien</option>
-          <option value="sight">Sehbehinderungen</option>
-          <option value="audio">Hörbehinderungen</option>
-          <option value="movement">Mobilitätseinschränkungen</option>
+          <!--<option value="sight">Sehbehinderungen</option>-->
+          <!--<option value="audio">Hörbehinderungen</option>-->
+          <!--<option value="movement">Mobilitätseinschränkungen</option>-->
           <option value="examples">Beispielguidelines</option>
         </select>
         <!--<input type="text" name="search" id="search" placeholder="Suche">-->

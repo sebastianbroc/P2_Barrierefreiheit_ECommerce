@@ -57,5 +57,15 @@ export default {
         return axios
             .post(url + 'saveAnnotation/', data)
             .then(response => response.data)
+    },
+    getAnnotation(data) {
+        return axios
+            .post(url + 'getAnnotation/', data)
+            .then(response => response.data)
+    },
+    voteAnnotation(data) {
+        return axios
+            .post(url + 'voteAnnotation/', data)
+            .then(response => response.data)
     }
 };

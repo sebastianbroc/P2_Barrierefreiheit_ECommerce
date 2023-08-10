@@ -321,9 +321,7 @@ router.post('/revertApproval', userMiddleware.isLoggedIn, userMiddleware.validat
 });
 
 router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
-
-
-
+    //TODO: make annotations editable (update)
     db.query(
         `INSERT INTO annotations (guideline_id, author_id, annotation_text) VALUES (${db.escape(req.body.guideline_id)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)});`,
         (err, result) => {
@@ -338,8 +336,6 @@ router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
                         console.log(errG)
                     }else {
                         let guidelineText = resG[0].text
-                        console.log(guidelineText.replace(db.escape(req.body.selected_text).replaceAll("'", ""), "<a id='" + result.insertId + "' class='annotationLink'>" + db.escape(req.body.selected_text) + "</a>" ))
-                        console.log(db.escape(req.body.selected_text).replaceAll("'", ""))
                         db.query(`UPDATE guidelines SET text = '${guidelineText.replace(db.escape(req.body.selected_text).replaceAll("'", ""), "<a id=" + result.insertId + " class=annotationLink>" + db.escape(req.body.selected_text).replaceAll("'", "") + "</a>" )}' WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
                             (errInner, resultInner) => {
                                 if (errInner){
@@ -359,6 +355,105 @@ router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
             }
         }
     );
+});
+
+router.post('/getAnnotation', (req, res, next) => {
+    db.query(
+        `SELECT * FROM annotations INNER JOIN users ON annotations.author_id = users.id WHERE annotation_id = ${db.escape(req.body.annotation_id)};`,
+        (err, result) => {
+            if (err) {
+                throw err;
+                return res.status(400).send({
+                    msg: err
+                });
+            } else {
+                //Count the score dynamically on every request (for performance reasons, it may be viable to keep the score stored in the annotation directly, but for now this will probably do just fine)
+                db.query(`SELECT vote_id, upvote FROM annotation_votes WHERE annotation_id = ${db.escape(req.body.annotation_id)} AND upvote = 1;`, (errupvotes, resupvotes) => {
+                    if(!errupvotes){
+                        db.query(`SELECT vote_id, upvote FROM annotation_votes WHERE annotation_id = ${db.escape(req.body.annotation_id)} AND upvote = 0;`, (errdownvotes, resdownvotes) => {
+                            if(!errdownvotes){
+                                let score = 0
+                                score += resupvotes.length
+                                score -= resdownvotes.length
+
+                                result[0].score = score
+
+                                if(req.body.user_id){
+                                    db.query(`SELECT * FROM annotation_votes WHERE voter_id = ${db.escape(req.body.user_id)};`, (erruser, resuser) => {
+                                        if(resuser.length == 0){
+                                            return res.status(200).send({
+                                                msg: result[0]
+                                            });
+                                        } else {
+                                            //user has casted a vote
+                                            result[0].userVote = resuser[0].upvote == 0 ? "d" : "u"
+                                            return res.status(200).send({
+                                                msg: result[0]
+                                            });
+                                        }
+                                    })
+                                } else {
+                                    return res.status(200).send({
+                                        msg: result[0]
+                                    });
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    );
+});
+
+router.post('/voteAnnotation', (req, res, next) => {
+    db.query(`SELECT * FROM annotation_votes WHERE voter_id = ${db.escape(req.body.user_id)} AND annotation_id = ${db.escape(req.body.annotation_id)};`, (errone, resone) => {
+        if(!errone){
+            if(resone.length == 0){
+                //the user has not voted on this specific annotation yet, so add it to the db
+                db.query(
+                    `INSERT INTO annotation_votes SET annotation_id = ${db.escape(req.body.annotation_id)}, voter_id = ${db.escape(req.body.user_id)}, upvote = ${db.escape(req.body.upvote)};`,
+                    (err, result) => {
+                        if (err) {
+                            throw err;
+                            return res.status(400).send({
+                                msg: err
+                            });
+                        } else {
+                            return res.status(200).send({
+                                msg: "Success"
+                            });
+                        }
+                    }
+                );
+            } else if(parseInt(resone[0].upvote) == parseInt(db.escape(req.body.upvote))) {
+                //remove previously casted vote
+                db.query(`DELETE FROM annotation_votes WHERE vote_id = ${resone[0].vote_id};`, (errremove, resremove) => {
+                    if(!errremove) {
+                        return res.status(200).send({
+                            msg: "Success"
+                        });
+                    } else {
+                        console.log(errremove)
+                        return res.status(500)
+                    }
+                })
+            } else if(resone[0].upvote !== db.escape(req.body.upvote)) {
+                //update previously casted vote (eg from up- to downvote)
+                db.query(`UPDATE annotation_votes SET upvote = ${db.escape(req.body.upvote)} WHERE vote_id = ${resone[0].vote_id};`, (errupdate, resupdate) => {
+                    if(!errupdate) {
+                        return res.status(200).send({
+                            msg: "Success"
+                        });
+                    } else {
+                        return res.status(500)
+                    }
+                })
+            }
+        } else {
+            return res.status(500)
+        }
+    })
 });
 
 module.exports = router;
