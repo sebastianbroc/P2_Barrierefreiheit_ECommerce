@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://localhost:3000/api/';
+//const url = 'http://localhost:3000/api/';
+const url = 'https://barrierefreiheit-api-26d587b906f5.herokuapp.com/api/';
 
 export default {
     login(credentials) {

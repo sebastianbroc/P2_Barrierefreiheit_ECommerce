@@ -538,7 +538,7 @@ export default {
     flex-direction: column;
     gap: $xs;
     position: fixed;
-    bottom: -45%;
+    bottom: -55%;
     width: 80%;
     transition: 0.3s ease;
 
