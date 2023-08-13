@@ -17,9 +17,9 @@ public class AuthenticationService
 
     public string GenerateToken(AuthUser user)
     {
-        var issuer = _configuration.GetValue<string>("Jwt:Issuer"); 
-        var audience = _configuration.GetValue<string>("Jwt:Audience");
-        var key = _configuration.GetValue<byte[]>("Jwt:Key");
+        var issuer = _configuration.GetValue<string>("JWT_ISSUER"); 
+        var audience = _configuration.GetValue<string>("JWT_AUDIENCE");
+        var key = _configuration.GetValue<byte[]>("JWT_KEY");
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]

@@ -1,0 +1,39 @@
+﻿version: '3.7'
+
+services:
+
+  web:
+    container_name: 'guidelineapi'
+    image: 'guidelineapi'
+    build:
+      context: .
+      dockerfile: guidelineapi.dockerfile
+    environment:
+      DB_CONN: "UserID=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Host=postgres;Port=5432;Database=${POSTGRES_DB};"
+      SALT: ${SALT}
+      JWT_ISSUER: "GuidelineAPI"
+      JWT_AUDIENCE: "GuidelineAPI"
+      JWT_KEY: ${JWT_KEY} 
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on:
+      - "postgres"
+    networks:
+      - guidelineapi-network
+
+  postgres:
+    container_name: 'postgres'
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB : ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    networks:
+      - guidelineapi-network
+
+networks:
+  guidelineapi-network:
+    driver: bridge

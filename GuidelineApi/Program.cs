@@ -32,10 +32,10 @@ builder.Services.AddAuthentication(options =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["JWT_ISSUER"],
+        ValidAudience = builder.Configuration["JWT_AUDIENCE"],
         IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            (Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = false,
@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 builder.Configuration.AddUserSecrets(Assembly.GetCallingAssembly());
 
 builder.Services.AddDbContext<DBContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONN")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONN") ?? builder.Configuration["DB_CONN"]));
 
 builder.Services.AddCors(options =>
 {
@@ -64,11 +64,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseCors("cors_policy");

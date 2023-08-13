@@ -8,6 +8,7 @@ public class DBContext : DbContext
 
     public DBContext(DbContextOptions options) : base(options)
     {
+        Database.Migrate();
     }
 
     public DbSet<Comment> Comments { get; set; }
