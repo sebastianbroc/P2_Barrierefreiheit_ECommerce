@@ -1,6 +1,4 @@
-﻿using UserAccessService.Service;
-
-namespace GuidelineAPI.Services;
+﻿namespace GuidelineAPI.Services;
 
 public class CommentService : BaseService<Comment>, ICommentService
 {

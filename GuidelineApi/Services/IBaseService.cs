@@ -1,6 +1,4 @@
-﻿using GuidelineAPI;
-
-namespace UserAccessService.Service;
+﻿namespace GuidelineAPI.Services;
 
 public interface IBaseService<T> where T : BaseModel
 {
