@@ -6,6 +6,7 @@ public class Guideline : BaseModel
 {
     public virtual User Author { get; set; }
     public String Text { get; set; }
+    public String Teaser { get; set; }
     public virtual List<Guid> ApprovedBy { get; set; }
     public virtual List<Comment> Comments { get; set; }
 }
