@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserAccessService.Service;
 
 namespace GuidelineAPI.Services;
 
