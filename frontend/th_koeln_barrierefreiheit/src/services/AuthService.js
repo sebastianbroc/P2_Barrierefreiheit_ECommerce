@@ -1,18 +1,24 @@
 import axios from 'axios';
 
 //const url = 'http://localhost:3000/api/';
-const url = 'https://barrierefreiheit-api-26d587b906f5.herokuapp.com/api/';
+//const url = 'https://barrierefreiheit-api-26d587b906f5.herokuapp.com/api/';
+const url = 'http://37.120.175.2:5279/';
 
 export default {
     login(credentials) {
         return axios
-            .post(url + 'login/', credentials)
-            .then(response => response.data);
+            .post(url + 'auth/login', null, {params: {username: credentials.name, password: credentials.password}, headers: {Accept: 'text/plain'}})
+            .then(response => response);
     },
     signUp(credentials) {
         return axios
-            .post(url + 'sign-up/', credentials)
-            .then(response => response.data);
+            .post(url + 'auth/register', null, {params: {username: credentials.name, password: credentials.password}, headers: {Accept: 'text/plain'}})
+            .then(response => response);
+    },
+    getCurrentUser() {
+      return axios
+          .get(url + 'User', {headers: {Accept: 'text/plain'}})
+          .then(response => response);
     },
     getUser(data) {
         return axios

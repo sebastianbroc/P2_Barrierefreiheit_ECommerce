@@ -15,7 +15,7 @@
       <div class="separator" id="separator"></div>
       <form id="login_form">
         <h1>Login</h1>
-        <label for="login_email">E-Mail</label><br><input type="text" name="email" id="login_email" v-model="login_email"><br>
+        <label for="login_name">Nutzername</label><br><input type="text" name="name" id="login_name" v-model="login_name"><br>
         <label for="login_password">Passwort</label><br><input type="password" name="password" id="login_password" v-model="login_password">
         <div class="last-line">
           <input type="button" value="Login" @click="login"><p>{{msg}}</p>
@@ -38,7 +38,7 @@ export default {
       register_name: null,
       register_password: null,
       register_password_repeat: null,
-      login_email: null,
+      login_name: null,
       login_password: null,
       msg: null,
     }
@@ -53,19 +53,22 @@ export default {
     async login(){
         try {
           const credentials = {
-            email: this.login_email,
+            name: this.login_name,
             password: this.login_password
           };
           const response = await AuthService.login(credentials);
 
-          const token = response.token;
-          const user = response.user;
+          if(response.status == 200){
+            const token = response.data;
 
-          this.$store.dispatch('login', { token, user });
-          console.log(response)
+            let user = await AuthService.getCurrentUser()
+            console.log(user)
 
-          this.$router.push('/menu');
+            this.$store.dispatch('login', { token, user });
+            //this.$router.push('/menu');
+          }
         } catch (error) {
+          console.log(error)
           this.msg = error.response.data.msg;
         }
     },
@@ -78,9 +81,8 @@ export default {
           password_repeat: this.register_password_repeat
         };
         const response = await AuthService.signUp(credentials);
-        this.msg = response.msg;
-        if(response.msg == "Registrierung erfolgreich!"){
-          this.login_email = this.register_email
+        if(response.status == 200){
+          this.login_name = this.register_name
           this.login_password = this.register_password
           this.login()
         }
