@@ -69,7 +69,7 @@ export default {
 
 .cover-text {
   padding: $bfs * 2 0 $bfs * 6 0;
-  background: linear-gradient(to top, rgba(147,19,206,0.5), rgba(0,0,0,1)), url('@/assets/images/code.jpg');
+  background: linear-gradient(to top, rgba(140, 20, 197, 0.5), rgba(0,0,0,1)), url('@/assets/images/code.jpg');
   background-size: cover;
   border-bottom: solid 3px #00ad2f;
 
@@ -89,9 +89,10 @@ export default {
         typing 3.5s steps(50, end)
   }
 
+  /*
   b {
     color: $mi-pink;
-  }
+  }*/
 }
 
 @keyframes typing {
