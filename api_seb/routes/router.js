@@ -357,6 +357,65 @@ router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
+router.post('/deleteAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
+    db.query(`SELECT text from guidelines WHERE guideline_id = ${db.escape(req.body.guideline_id)};`, (errO, resO) => {
+        if(errO){
+            throw errO;
+            return res.status(400).send({
+                msg: errO
+            });
+        } else {
+            //remove the <a> element referencing the annotation from the text and update it in DB
+            let text = resO[0].text
+            let index = text.indexOf("<a id=" + req.body.annotation_id + " class=annotationLink>")
+
+            text = text.replace("<a id=" + req.body.annotation_id + " class=annotationLink>", "")
+            let textFirst = text.substring(0,index)
+            let textLast = text.substring(index).replace("</a>", "")
+
+            text = textFirst + textLast
+
+            db.query(`UPDATE guidelines SET text = ${db.escape(text)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`, (errT, resT) => {
+                if(errT){
+                    throw errT;
+                    return res.status(400).send({
+                        msg: errT
+                    });
+                } else {
+                    //in order not to run into sql constraints we also have to delete all annotation votes for this annotation
+                    db.query(
+                        `DELETE FROM annotation_votes WHERE annotation_id = ${db.escape(req.body.annotation_id)};`,
+                        (err, result) => {
+                            if (err) {
+                                throw err;
+                                return res.status(400).send({
+                                    msg: err
+                                });
+                            } else {
+                                db.query(
+                                    `DELETE FROM annotations WHERE annotation_id = ${db.escape(req.body.annotation_id)} AND author_id =${db.escape(req.body.author_id)};`,
+                                    (err, result) => {
+                                        if (err) {
+                                            throw err;
+                                            return res.status(400).send({
+                                                msg: err
+                                            });
+                                        } else {
+                                            return res.status(200).send({
+                                                msg: "Success"
+                                            });
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    );
+                }
+            })
+        }
+    })
+});
+
 router.post('/getAnnotation', (req, res, next) => {
     db.query(
         `SELECT * FROM annotations INNER JOIN users ON annotations.author_id = users.id WHERE annotation_id = ${db.escape(req.body.annotation_id)};`,

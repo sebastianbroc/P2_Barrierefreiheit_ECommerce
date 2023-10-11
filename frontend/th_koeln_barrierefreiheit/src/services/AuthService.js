@@ -59,6 +59,11 @@ export default {
             .post(url + 'saveAnnotation/', data)
             .then(response => response.data)
     },
+    deleteAnnotation(data) {
+        return axios
+            .post(url + 'deleteAnnotation/', data)
+            .then(response => response)
+    },
     getAnnotation(data) {
         return axios
             .post(url + 'getAnnotation/', data)

@@ -36,6 +36,7 @@
           <p v-if="activeAnnotation">{{activeAnnotation.score}}</p>
           <div class="vote_button" id="downvote" @click="handleAnnotationVote"></div>
         </div>
+        <button @click="deleteAnnotation(activeAnnotation.annotation_id)" v-if="activeAnnotation && activeAnnotation.author_id == this.$store.getters.getUser.id"><img src="@/assets/images/delete.svg"></button>
       </div>
       <div id="annotation_editor" :class="{active: selectedText}">
         <h2>Annotation Verfassen</h2>
@@ -340,6 +341,18 @@ export default {
         this.$router.go()
       }
     },
+    async deleteAnnotation(id){
+      let data = {
+        "guideline_id": this.$route.query.g,
+        "annotation_id": id,
+        "author_id": this.$store.getters.getUser.id
+      }
+
+      let result = await AuthService.deleteAnnotation(data)
+      if(result.status == 200){
+        this.$router.go()
+      }
+    },
     getSelectionText() {
       if(!this.selectedText){
         let text = "";
@@ -525,6 +538,22 @@ export default {
       width: $image-smaller;
       height: $image-smaller;
       object-fit: cover;
+    }
+
+    button {
+      position: absolute;
+      right: 13px;
+      top: 10px;
+      width: 40px;
+      height: 40px;
+      background: none;
+
+      img {
+        width: 100%;
+        height: 100%;
+        filter: invert(100%);
+        background: none;
+      }
     }
 
     .annotation_voting {
