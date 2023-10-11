@@ -32,9 +32,9 @@
           <p>{{activeAnnotation.annotation_text}}</p>
         </div>
         <div class="annotation_voting" v-if="activeAnnotation">
-          <div class="vote_button" id="upvote" @click="handleAnnotationVote"></div>
+          <div class="vote_button" id="upvote" @click="handleAnnotationVote" :class="{active : activeAnnotation.userVote === 'u'}"></div>
           <p v-if="activeAnnotation">{{activeAnnotation.score}}</p>
-          <div class="vote_button" id="downvote" @click="handleAnnotationVote"></div>
+          <div class="vote_button" id="downvote" @click="handleAnnotationVote" :class="{active : activeAnnotation.userVote === 'd'}"></div>
         </div>
         <button @click="deleteAnnotation(activeAnnotation.annotation_id)" v-if="activeAnnotation && activeAnnotation.author_id == this.$store.getters.getUser.id"><img src="@/assets/images/delete.svg"></button>
       </div>
@@ -241,7 +241,7 @@ export default {
         this.activeAnnotation = result.msg
         this.annotationLoading = false
         this.timeOfAnnotationOpen = moment();
-        this.handleVoteButtonColor()
+        //this.handleVoteButtonColor()
       }
     },
     buildAnnotationLinks(){
@@ -271,22 +271,6 @@ export default {
 
       let result = await AuthService.getAnnotation(data)
       this.activeAnnotation = result.msg
-
-      this.handleVoteButtonColor()
-    },
-    handleVoteButtonColor(){
-      if(document.getElementById("upvote") && document.getElementById("downvote")){
-        if(this.activeAnnotation.userVote === "u"){
-          document.getElementById("upvote").classList.add("active")
-          document.getElementById("downvote").classList.remove("active")
-        } else if (this.activeAnnotation.userVote === "d"){
-          document.getElementById("upvote").classList.remove("active")
-          document.getElementById("downvote").classList.add("active")
-        } else {
-          document.getElementById("upvote").classList.remove("active")
-          document.getElementById("downvote").classList.remove("active")
-        }
-      }
     },
     handleClick(evt){
       if(this.activeAnnotation != null && document.getElementById("annotation").classList.contains("active") && this.timeOfAnnotationOpen !== null && moment().diff(this.timeOfAnnotationOpen, 'seconds', true) > 0.1){

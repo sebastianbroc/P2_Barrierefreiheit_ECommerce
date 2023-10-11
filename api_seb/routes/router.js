@@ -426,7 +426,7 @@ router.post('/getAnnotation', (req, res, next) => {
                                 result[0].score = score
 
                                 if(req.body.user_id){
-                                    db.query(`SELECT * FROM annotation_votes WHERE voter_id = ${db.escape(req.body.user_id)};`, (erruser, resuser) => {
+                                    db.query(`SELECT * FROM annotation_votes WHERE voter_id = ${db.escape(req.body.user_id)} and annotation_id = ${db.escape(req.body.annotation_id)};`, (erruser, resuser) => {
                                         if(resuser.length == 0){
                                             return res.status(200).send({
                                                 msg: result[0]
