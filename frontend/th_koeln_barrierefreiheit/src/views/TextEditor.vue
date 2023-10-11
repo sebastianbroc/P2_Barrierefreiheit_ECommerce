@@ -17,9 +17,20 @@
           :editorOptions="editorSettings"
           @selection-change="handleCursorChange"
           @text-change="handleTextChange"
+          style="height: 600px;"
       />
-      <p v-if="webSocketActive" style="color: green;">Web-Socket Verbindung aktiv</p>
-      <p v-if="!webSocketActive" style="color: red;">Web-Socket Verbindung inaktiv</p>
+      <h2 style="margin-top: 100px;">Quellenverzeichnis</h2>
+      <VueEditor
+          ref="editorBibliography"
+          v-model="editorBibliographyContent"
+          id="vueEditorBibliography"
+          :customModules="customModulesForEditor"
+          :editorOptions="editorSettings"
+          @selection-change="handleCursorChange"
+          @text-change="handleTextChange"
+      />
+      <!--<p v-if="webSocketActive" style="color: green;">Web-Socket Verbindung aktiv</p>-->
+      <!--<p v-if="!webSocketActive" style="color: red;">Web-Socket Verbindung inaktiv</p>-->
     </div>
   </div>
 </template>
@@ -53,6 +64,7 @@ export default {
       authorName: this.$store.getters.getUser.name,
       guidelineTitle: '',
       editorContent: '',
+      editorBibliographyContent: '',
       activeUsers: [],
       textChangeTimeout : false,
       lastWsUpdate: moment(),
@@ -92,6 +104,7 @@ export default {
 
       this.guidelineTitle = result.msg.title
       this.editorContent = result.msg.text.replace('<pre><p>Code</p><code><xmp>', '<pre class="ql-syntax" spellcheck="false">').replace('</xmp></code></pre>', '</pre>')
+      this.editorBibliographyContent = result.msg.bibliography
 
     },
     async save(){
@@ -99,7 +112,8 @@ export default {
         "author_id": this.$store.getters.getUser.id,
         "title": this.guidelineTitle,
         "last_update": moment().format("Y-MM-DD HH:MM:s"),
-        "text": this.editorContent.replace('<pre class="ql-syntax" spellcheck="false">', '<pre><p>Code</p><code><xmp>').replace('</pre>', '</xmp></code></pre>')
+        "text": this.editorContent.replace('<pre class="ql-syntax" spellcheck="false">', '<pre><p>Code</p><code><xmp>').replace('</pre>', '</xmp></code></pre>'),
+        "bibliography": this.editorBibliographyContent
       }
 
       if(this.existingGuideline) data.guideline_id = this.$route.query.g

@@ -36,7 +36,6 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
                             )}, ${db.escape(hash)}, now())`,
                             (err, result) => {
                                 if (err) {
-                                    throw err;
                                     return res.status(400).send({
                                         msg: err
                                     });
@@ -59,7 +58,6 @@ router.post('/login', (req, res, next) => {
         (err, result) => {
             // user does not exists
             if (err) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -76,7 +74,6 @@ router.post('/login', (req, res, next) => {
                 (bErr, bResult) => {
                     // wrong password
                     if (bErr) {
-                        throw bErr;
                         return res.status(401).send({
                             msg: 'Nutzername oder Passwort sind falsch!'
                         });
@@ -112,7 +109,6 @@ router.post('/returnUser', (req, res, next) => {
         (err, result) => {
             // user does not exists
             if (err) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -131,7 +127,6 @@ router.post('/updateUser', userMiddleware.isLoggedIn, (req, res, next) => {
         (err, result) => {
             // user does not exists
             if (err) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -150,7 +145,7 @@ router.post('/guidelines', (req, res, next) => {
             `SELECT * FROM guidelines WHERE category = ${db.escape(req.body.category)};`,
             (err, result) => {
                 if (err) {
-                    throw err;
+
                     return res.status(400).send({
                         msg: err
                     });
@@ -166,7 +161,7 @@ router.post('/guidelines', (req, res, next) => {
             `SELECT * FROM guidelines;`,
             (err, result) => {
                 if (err) {
-                    throw err;
+
                     return res.status(400).send({
                         msg: err
                     });
@@ -200,7 +195,7 @@ router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
         `SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.author_id)};`,
         (err, result) => {
             if (err) {
-                throw err;
+
                 return res.status(400).send({
                     msg: err
                 });
@@ -217,10 +212,9 @@ router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validate
     if(req.body.guideline_id){
         userMiddleware.allowedToUpdateGuideline(req, res, () => {
             db.query(
-                `UPDATE guidelines SET title = ${db.escape(req.body.title)}, text = ${db.escape(req.body.text)}, last_update = ${db.escape(req.body.last_update)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
+                `UPDATE guidelines SET title = ${db.escape(req.body.title)}, text = ${db.escape(req.body.text)}, bibliography = ${db.escape(req.body.bibliography)}, last_update = ${db.escape(req.body.last_update)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
                 (err, result) => {
                     if (err) {
-                        throw err;
                         return res.status(400).send({
                             msg: err
                         });
@@ -234,10 +228,9 @@ router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validate
         })
     } else {
         db.query(
-            `INSERT INTO guidelines (title, author_id, text, last_update) VALUES (${db.escape(req.body.title)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)}, ${db.escape(req.body.last_update)});`,
+            `INSERT INTO guidelines (title, author_id, text, bibliography, last_update) VALUES (${db.escape(req.body.title)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)}, ${db.escape(req.body.bibliography)}, ${db.escape(req.body.last_update)});`,
             (err, result) => {
                 if (err) {
-                    throw err;
                     return res.status(400).send({
                         msg: err
                     });
@@ -256,7 +249,6 @@ router.post('/guideline', (req, res, next) => {
         `SELECT * FROM guidelines INNER JOIN users ON author_id = users.id WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
         (err, result) => {
             if (err || result.length == 0) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -266,7 +258,7 @@ router.post('/guideline', (req, res, next) => {
                     `SELECT * FROM approvements INNER JOIN users ON expert_id = users.id WHERE guideline_id = ${db.escape(req.body.guideline_id)};`,
                     (err, result_approvements) => {
                         if (err) {
-                            throw err;
+
                             return res.status(400).send({
                                 msg: err
                             });
@@ -289,7 +281,7 @@ router.post('/approveGuideline', userMiddleware.isLoggedIn, userMiddleware.valid
         `INSERT INTO approvements (expert_id, guideline_id) VALUES (${db.escape(req.body.expert_id)}, ${db.escape(req.body.guideline_id)});`,
         (err, result) => {
             if (err) {
-                throw err;
+
                 return res.status(400).send({
                     msg: err
                 });
@@ -307,7 +299,6 @@ router.post('/revertApproval', userMiddleware.isLoggedIn, userMiddleware.validat
         `DELETE FROM approvements WHERE expert_id = ${db.escape(req.body.expert_id)} AND guideline_id = ${db.escape(req.body.guideline_id)};`,
         (err, result) => {
             if (err) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -326,7 +317,6 @@ router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
         `INSERT INTO annotations (guideline_id, author_id, annotation_text) VALUES (${db.escape(req.body.guideline_id)}, ${db.escape(req.body.author_id)}, ${db.escape(req.body.text)});`,
         (err, result) => {
             if (err) {
-                throw err;
                 return res.status(400).send({
                     msg: err
                 });
@@ -360,7 +350,6 @@ router.post('/saveAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
 router.post('/deleteAnnotation', userMiddleware.isLoggedIn, (req, res, next) => {
     db.query(`SELECT text from guidelines WHERE guideline_id = ${db.escape(req.body.guideline_id)};`, (errO, resO) => {
         if(errO){
-            throw errO;
             return res.status(400).send({
                 msg: errO
             });
@@ -377,7 +366,6 @@ router.post('/deleteAnnotation', userMiddleware.isLoggedIn, (req, res, next) => 
 
             db.query(`UPDATE guidelines SET text = ${db.escape(text)} WHERE guideline_id = ${db.escape(req.body.guideline_id)};`, (errT, resT) => {
                 if(errT){
-                    throw errT;
                     return res.status(400).send({
                         msg: errT
                     });
@@ -387,7 +375,7 @@ router.post('/deleteAnnotation', userMiddleware.isLoggedIn, (req, res, next) => 
                         `DELETE FROM annotation_votes WHERE annotation_id = ${db.escape(req.body.annotation_id)};`,
                         (err, result) => {
                             if (err) {
-                                throw err;
+
                                 return res.status(400).send({
                                     msg: err
                                 });
@@ -396,7 +384,7 @@ router.post('/deleteAnnotation', userMiddleware.isLoggedIn, (req, res, next) => 
                                     `DELETE FROM annotations WHERE annotation_id = ${db.escape(req.body.annotation_id)} AND author_id =${db.escape(req.body.author_id)};`,
                                     (err, result) => {
                                         if (err) {
-                                            throw err;
+
                                             return res.status(400).send({
                                                 msg: err
                                             });
@@ -421,7 +409,7 @@ router.post('/getAnnotation', (req, res, next) => {
         `SELECT * FROM annotations INNER JOIN users ON annotations.author_id = users.id WHERE annotation_id = ${db.escape(req.body.annotation_id)};`,
         (err, result) => {
             if (err) {
-                throw err;
+
                 return res.status(400).send({
                     msg: err
                 });
@@ -474,7 +462,7 @@ router.post('/voteAnnotation', (req, res, next) => {
                     `INSERT INTO annotation_votes SET annotation_id = ${db.escape(req.body.annotation_id)}, voter_id = ${db.escape(req.body.user_id)}, upvote = ${db.escape(req.body.upvote)};`,
                     (err, result) => {
                         if (err) {
-                            throw err;
+
                             return res.status(400).send({
                                 msg: err
                             });

@@ -9,7 +9,7 @@
       <p v-html="guideline.text" id="text"></p>
       <div class="bibliography unselectable" v-if="guideline.bibliography && guideline.bibliography.length > 0">
         <h3>Quellen</h3>
-        <p v-for="source in guideline.bibliography" :key="source.id" :value="source.id"><b>[{{source.id}}]</b> {{source.text}}</p>
+        <p v-html="guideline.bibliography"></p>
       </div>
       <p id="last_update" class="unselectable">letzte Aktualisierung: {{guideline.last_update}}</p>
       <button id="add_annotation_button" @click="toggleAddAnnotation" v-if="!addAnnotation"><img src="@/assets/images/edit.svg" alt="Diese Guideline bearbeiten" v-if="this.$store.getters.isLoggedIn && !addAnnotation" id="editButton">Annotation verfassen</button>
@@ -483,6 +483,7 @@ export default {
   }
 
   #add_annotation_button {
+    box-sizing: border-box;
     cursor: pointer;
     font-family: 'Roboto Slab', sans-serif;
     font-weight: bold;
@@ -492,6 +493,7 @@ export default {
     max-width: 4 * $bfs-xxl;
     display: flex;
     align-items: center;
+    border: solid 2px $mi-lila;
 
     &.revert {
       font-size: $bfs-xs;
@@ -541,6 +543,7 @@ export default {
     }
 
     button {
+      cursor: pointer;
       position: absolute;
       right: 13px;
       top: 10px;
