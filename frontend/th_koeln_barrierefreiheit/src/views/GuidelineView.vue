@@ -4,7 +4,7 @@
     <div class="content has-gap">
       <div class="loading" v-if="!guideline"></div>
     <div class="guideline" v-if="guideline">
-      <div class="title"><h1 class="unselectable">{{guideline.title}}</h1><img v-if="guideline.verified" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"><router-link :to="'/editor?g=' + this.$route.query.g"><img src="@/assets/images/edit.svg" alt="Diese Guideline bearbeiten" v-if="this.$store.getters.isLoggedIn && this.guideline.author_id == this.$store.getters.getUser.id" id="editButton"></router-link></div>
+      <div class="title"><h1 class="unselectable">{{guideline.title}}</h1><img v-if="guideline.approvements.length >= 5" src="@/assets/images/verified.png" class="verified_badge" title="Diese Guideline ist verifiziert"><router-link :to="'/editor?g=' + this.$route.query.g"><img src="@/assets/images/edit.svg" alt="Diese Guideline bearbeiten" v-if="this.$store.getters.isLoggedIn && this.guideline.author_id == this.$store.getters.getUser.id" id="editButton"></router-link></div>
       <h2 class="unselectable">von <router-link :to="'/user?u=' + guideline.author_id" class="unselectable">{{guideline.name}}</router-link></h2>
       <p v-html="guideline.text" id="text"></p>
       <div class="bibliography unselectable" v-if="guideline.bibliography && guideline.bibliography.length > 0">
@@ -411,7 +411,7 @@ export default {
     margin-bottom: $xs;
 
     img {
-      margin-left: $l;
+      margin-left: $s;
       width: 30px;
       height: 30px;
     }
