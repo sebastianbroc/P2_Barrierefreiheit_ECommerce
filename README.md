@@ -3,8 +3,8 @@ Dieses Repo wird genutzt, um die Fortschritte des Projekts "Barrierefreiheit im 
 
 Ein erster Prototyp des Frontends-Designs ist [via GitHub Pages](https://sebastianbroc.github.io/P2_Barrierefreiheit_ECommerce/#/) verfügbar
 
-## Roadmap
-![roadmap](https://github.com/sebastianbroc/P2_Barrierefreiheit_ECommerce/assets/63352229/49e88b62-986b-48bd-a2ee-58c4b50196f2)
+## Roadmap und aktueller Stand
+![roadmap](https://github.com/sebastianbroc/P2_Barrierefreiheit_ECommerce/assets/63352229/92b266ef-6879-4899-bd63-6f00e126b6cf)
 
 ## Getting Started 🚀
 ### API
