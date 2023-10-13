@@ -15,6 +15,9 @@ Da der Platz zur Anzeige von Experten, welche eine Guideline bestätigt haben, b
 Es werden die ältesten Bestätigungen zuerst angezeigt, ab der sechst-ältesten Bestätigung ist die Bestätigung nicht mehr in der Übersicht auf der Guideline sichtbar.
 Dies stellt die Lösung mit dem minimalsten Entwicklungsaufwand und dennoch den wenigsten Nachteilen dar. 
 
+![Bild 13 10 23 um 14 31](https://github.com/sebastianbroc/P2_Barrierefreiheit_ECommerce/assets/63352229/946dc0e5-cbab-4641-9925-29533fd55bcb)
+
+
 ## Vor- und Nachteile der Optionen
 
 ### Anzeige der neuesten
