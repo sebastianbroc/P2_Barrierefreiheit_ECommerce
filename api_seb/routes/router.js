@@ -208,6 +208,49 @@ router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
+router.post('/userActivity', userMiddleware.isLoggedIn, (req, res, next) => {
+    db.query(`SELECT * from approvements INNER JOIN guidelines on approvements.guideline_id = guidelines.guideline_id WHERE expert_id = ${db.escape(req.body.user_id)} ORDER BY approvement_timestamp DESC;`, (err1, res1) => {
+        if(err1){
+            console.log(err1)
+            return res.status(400).send({
+                msg: err1
+            });
+        } else {
+            let approvements = res1
+            db.query(`SELECT * from annotations INNER JOIN guidelines on annotations.guideline_id = guidelines.guideline_id WHERE annotations.author_id = ${db.escape(req.body.user_id)} ORDER BY annotation_timestamp DESC;`, (err2, res2) => {
+                if(err2){
+                    return res.status(400).send({
+                        msg: err2
+                    });
+                } else {
+                    let annotations = res2
+
+                    db.query(`SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.user_id)} ORDER BY last_update;`, (err3, res3) => {
+                        if(err3){
+                            return res.status(400).send({
+                                msg: err3
+                            });
+                        } else {
+                            let result = approvements.concat(annotations).concat(res3)
+
+                            result = result.map((item) => {return {...item, timestamp: item.approvement_timestamp ? item.approvement_timestamp : (item.annotation_timestamp ? item.annotation_timestamp : item.last_update)}})
+                            result = result.map((item) => {return {...item, type: item.approvement_timestamp ? "approvement" : (item.annotation_timestamp ? "annotation" : "guideline")}})
+                            result = result.map((item) => {return {...item, id: item.guideline_id}})
+                            result.sort((a,b) => {
+                                return new Date(b.timestamp) - new Date(a.timestamp)
+                            })
+
+                            return res.status(200).send({
+                                msg: result
+                            });
+                        }
+                    })
+                }
+            })
+        }
+    })
+});
+
 router.post('/saveGuideline', userMiddleware.isLoggedIn, userMiddleware.validateExpertStatus, (req, res, next) => {
     if(req.body.guideline_id){
         userMiddleware.allowedToUpdateGuideline(req, res, () => {

@@ -15,12 +15,13 @@
           <div class="posts">
             <h1>Beiträge</h1>
             <div v-for="contribution in contributions" :key="contribution.id" :value="contribution.id" class="post">
-              <h3 v-if="contribution.type == 'guideline'">Verfasste eine Guideline: <router-link :to="'/guideline?g=' + contribution.id">{{contribution.name}}</router-link></h3>
-              <h3 v-if="contribution.type == 'annotation'">Verfasste eine Annotation zu: <router-link :to="'/guideline?g=' + contribution.id">{{contribution.name}}</router-link><p>{{contribution.annotation}}</p></h3>
+              <h3 v-if="contribution.type == 'guideline'">Verfasste eine Guideline: <router-link :to="'/guideline?g=' + contribution.id">{{contribution.title}}</router-link></h3>
+              <h3 v-if="contribution.type == 'annotation'">Verfasste eine Annotation zu: <router-link :to="'/guideline?g=' + contribution.id">{{contribution.title}}</router-link><p>{{contribution.annotation_text}}</p></h3>
+              <h3 v-if="contribution.type == 'approvement'">Bestätigte eine Guideline: <router-link :to="'/guideline?g=' + contribution.id">{{contribution.title}}</router-link></h3>
               <h4>{{contribution.date}}</h4>
             </div>
           </div>
-          <div class="expert_qualification">
+          <div class="expert_qualification" v-if="user.is_expert">
             <h1>Expertenqualifikation</h1>
             <p>{{user.qualification}}</p>
           </div>
@@ -102,6 +103,12 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    async getActivity(){
+      let activities = await AuthService.getUserActivity({user_id: this.$route.query.u})
+      activities = activities.msg
+      activities = activities.map(item => {return {...item, date: moment(item.timestamp).format("d.m.Y")}})
+      this.contributions = activities
+    },
     setImage(base64){
       this.user.image = base64
     },
@@ -125,9 +132,18 @@ export default {
   },
   async mounted(){
     let data = await AuthService.getUser({id: this.$route.query.u})
+    await this.getActivity()
     if(data && data.msg){
       data.msg.registered = moment(data.msg.registered).format('D.M.Y')
       this.user = data.msg
+    }
+  },
+  watch: {
+    '$route.params.u': {
+      handler: function() {
+        this.$router.go()
+      },
+      deep: true
     }
   }
 }
@@ -157,6 +173,10 @@ export default {
       height: 30px;
       filter: invert(15%) sepia(93%) saturate(4451%) hue-rotate(279deg) brightness(86%) contrast(102%);
       cursor: pointer;
+    }
+
+    p {
+      max-width: 600px;
     }
   }
 

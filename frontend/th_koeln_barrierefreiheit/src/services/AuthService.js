@@ -34,6 +34,11 @@ export default {
             .post(url + 'userGuidelines/', data)
             .then(response => response.data)
     },
+    getUserActivity(data) {
+        return axios
+            .post(url + 'userActivity/', data)
+            .then(response => response.data)
+    },
     saveGuideline(data) {
         return axios
             .post(url + 'saveGuideline/', data)
