@@ -190,7 +190,7 @@ router.post('/guidelines', (req, res, next) => {
     }
 });
 
-router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
+router.post('/userGuidelines', (req, res, next) => {
     db.query(
         `SELECT * FROM guidelines WHERE author_id = ${db.escape(req.body.author_id)};`,
         (err, result) => {
@@ -208,7 +208,7 @@ router.post('/userGuidelines', userMiddleware.isLoggedIn, (req, res, next) => {
     );
 });
 
-router.post('/userActivity', userMiddleware.isLoggedIn, (req, res, next) => {
+router.post('/userActivity', (req, res, next) => {
     db.query(`SELECT * from approvements INNER JOIN guidelines on approvements.guideline_id = guidelines.guideline_id WHERE expert_id = ${db.escape(req.body.user_id)} ORDER BY approvement_timestamp DESC;`, (err1, res1) => {
         if(err1){
             console.log(err1)

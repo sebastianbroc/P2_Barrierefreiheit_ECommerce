@@ -231,6 +231,8 @@ export default {
       flex-direction: column;
       gap: $bfs;
       width: 50%;
+      max-height: 500px;
+      overflow: scroll;
 
       p {
         margin: 0;
