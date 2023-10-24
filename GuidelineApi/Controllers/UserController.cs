@@ -31,7 +31,7 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
     public ActionResult<User> Put(User user) 
     {
-        var userId = User.Claims.First(i => i.Type == "UserId").Value;
+        var userId = HttpContext.User.Claims.First(i => i.Type == "UserId").Value;
         if (user.id.Equals(Guid.Parse(userId)))
         {
             return Ok(_service.Update(user));
