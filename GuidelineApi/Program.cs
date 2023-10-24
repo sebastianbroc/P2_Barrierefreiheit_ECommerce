@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,14 +40,16 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt_Audience"],
         IssuerSigningKey = new SymmetricSecurityKey
             (Encoding.UTF8.GetBytes(builder.Configuration["Jwt_Key"] ?? throw new InvalidOperationException())),
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = false,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = false,
     };
+    //o.Authority = builder.Configuration["Jwt_Issuer"];
+    o.Audience = builder.Configuration["Jwt_Audience"];
+    o.RequireHttpsMetadata = false;
+    
 });
-
-builder.Services.AddAuthorization();
 
 
 if (isDevelopment)
