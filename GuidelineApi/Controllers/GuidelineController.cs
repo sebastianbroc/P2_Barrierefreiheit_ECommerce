@@ -1,9 +1,11 @@
 using GuidelineAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidelineAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class GuidelineController : ControllerBase
 {
@@ -18,6 +20,7 @@ public class GuidelineController : ControllerBase
         _userService = userService;
     }
 
+    [AllowAnonymous]
     [HttpGet("GetAll",Name = "GetGuidelines")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<GuidelineDto>))]
     public IEnumerable<GuidelineDto> Get()
@@ -25,6 +28,7 @@ public class GuidelineController : ControllerBase
         return _service.GetAll();
     }
     
+    [AllowAnonymous]
     [HttpGet("GetById",Name = "GetGuideline")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GuidelineDto))]
     public GuidelineDto? GetOne(Guid id)

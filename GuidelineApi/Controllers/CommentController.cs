@@ -1,9 +1,11 @@
 ﻿using GuidelineAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidelineAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class CommentController : ControllerBase
 {

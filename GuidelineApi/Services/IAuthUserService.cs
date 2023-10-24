@@ -1,6 +1,6 @@
 ﻿namespace GuidelineAPI.Services;
 
-public interface IAuthUserService : IBaseService<AuthUser>
+public interface IAuthUserService : IBaseService<User>
 {
-    public AuthUser? GetUser(string username);
+    public User? GetUser(string username);
 }

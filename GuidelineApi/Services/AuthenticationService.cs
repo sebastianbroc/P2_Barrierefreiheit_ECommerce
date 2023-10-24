@@ -15,7 +15,7 @@ public class AuthenticationService
         _configuration = configuration;
     }
 
-    public string GenerateToken(AuthUser user)
+    public string GenerateToken(User user)
     {
         var issuer = _configuration.GetValue<string>("JWT_ISSUER"); 
         var audience = _configuration.GetValue<string>("JWT_AUDIENCE");

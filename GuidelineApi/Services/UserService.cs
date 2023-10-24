@@ -9,8 +9,8 @@ public class UserService: BaseService<User>, IUserService
         
     }
 
-    public List<User> GetAll()
+    public List<UserDto> GetAll()
     {
-        return _context.Set<User>().Include(u => u.Guidelines ).ToList();
+        return _context.Set<User>().Select(user=>user.ToUserDto()).ToList(); //.Include(u => u.Guidelines ).ToList();
     }
 }
