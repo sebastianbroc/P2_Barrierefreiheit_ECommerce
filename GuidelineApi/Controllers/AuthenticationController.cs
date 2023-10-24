@@ -33,7 +33,7 @@ public class AuthentificationController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost( "register")]
-    public AuthUser? Register(string username, string password)
+    public UserDto? Register(string username, string password)
     {
         
         var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -43,12 +43,13 @@ public class AuthentificationController : ControllerBase
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
 
-        return _service.GetUser(username) != null ? null : _service.Create(new AuthUser()
+        return _service.GetUser(username) != null ? null : _service.Create(new User()
         {
             id = Guid.NewGuid(),
             Username = username,
-            Password = hashed
-        });
+            Password = hashed,
+            //Guidelines = new ()
+        }).ToUserDto();
     }
     
     [AllowAnonymous]
@@ -78,7 +79,7 @@ public class AuthentificationController : ControllerBase
     }
     
     [HttpDelete("delete")]
-    public IActionResult Delete(AuthUser request)
+    public IActionResult Delete(User request)
     {
         var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: request.Password,
