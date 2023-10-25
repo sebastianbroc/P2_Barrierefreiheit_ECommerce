@@ -27,3 +27,8 @@ cd frontend/th_koeln_barrierefreiheit
 yarn install
 yarn serve
 ```
+
+### Links
+Keycloak: [https://auth.burnoutstud.io/](https://auth.burnoutstud.io/) <br>
+Swagger API: [https://api.burnoutstud.io/](https://api.burnoutstud.io/swagger/index.html) <br>
+Frontend: [https://guidelines.burnoutstud.io/](https://guidelines.burnoutstud.io/) <br>
