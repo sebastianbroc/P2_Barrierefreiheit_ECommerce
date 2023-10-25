@@ -15,11 +15,11 @@ public class AuthenticationService
         _configuration = configuration;
     }
 
-    public string GenerateToken(AuthUser user)
+    public string GenerateToken(User user)
     {
         var issuer = _configuration.GetValue<string>("JWT_ISSUER"); 
         var audience = _configuration.GetValue<string>("JWT_AUDIENCE");
-        var key = _configuration.GetValue<byte[]>("JWT_KEY");
+        var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT_KEY"));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]

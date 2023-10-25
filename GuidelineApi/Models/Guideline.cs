@@ -6,7 +6,10 @@ public class Guideline : BaseModel
 {
     public virtual User Author { get; set; }
     public String Text { get; set; }
-    public virtual List<Guid> ApprovedBy { get; set; }
+    
+    public String Teaser { get; set; }
+    
+    public virtual List<User> ApprovedBy { get; set; } 
     public virtual List<Comment> Comments { get; set; }
 }
 
@@ -14,7 +17,7 @@ public class GuidelineDto : BaseModel
 {
     public virtual GuidelineUserDto Author { get; set; }
     public String Text { get; set; }
-    public virtual List<Guid> ApprovedBy { get; set; }
+    public virtual List<User> ApprovedBy { get; set; }
     public virtual List<GuidelineCommentDto> Comments { get; set; }
 }
 
@@ -30,7 +33,6 @@ public static class GuidelineDtoExtensions
     {
         return new Guideline()
         {
-            ApprovedBy = new(),
             Author = author,
             Text = guideline.Text,
             Comments = new(),

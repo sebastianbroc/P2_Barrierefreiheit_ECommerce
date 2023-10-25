@@ -2,7 +2,7 @@
 
 services:
 
-  web:
+  api:
     container_name: 'guidelineapi'
     image: 'guidelineapi'
     build:
@@ -23,7 +23,7 @@ services:
       - guidelineapi-network
 
   postgres:
-    container_name: 'postgres'
+    container_name: 'guidelinepostgres'
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -33,7 +33,19 @@ services:
       - '5432:5432'
     networks:
       - guidelineapi-network
-
+      
+  frontend:
+    container_name: 'guidelinefrontend'
+    image: 'guidelinefrontend'
+    build:
+      context: .
+      dockerfile: ../frontend/th_koeln_barrierefreiheit/guidelinefrontend.dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - guidelineapi-network
+    
 networks:
   guidelineapi-network:
     driver: bridge

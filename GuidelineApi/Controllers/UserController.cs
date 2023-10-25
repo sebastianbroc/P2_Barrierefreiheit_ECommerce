@@ -1,9 +1,12 @@
 using GuidelineAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidelineAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class UserController: ControllerBase
 {
@@ -15,32 +18,38 @@ public class UserController: ControllerBase
         _logger = logger;
         _service = service;
     }
-
+    
+    [AllowAnonymous]
     [HttpGet(Name = "GetUser")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<User>))]
-    public IEnumerable<User> Get()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserDto>))]
+    public IEnumerable<UserDto> Get()
     {
         return _service.GetAll();
     }
     
-    [HttpPost(Name = "CreateUser")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-    public User Post(User user)
-    {
-        return _service.Create(user);
-    }
-    
     [HttpPut(Name = "UpdateUser")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-    public User Put(User user) 
+    public ActionResult<User> Put(User user) 
     {
-        return _service.Update(user);
+        var userId = HttpContext.User.Claims.First(i => i.Type == "UserId").Value;
+        if (user.id.Equals(Guid.Parse(userId)))
+        {
+            return Ok(_service.Update(user));
+        }
+
+        return BadRequest("");
     }
 
     [HttpDelete(Name = "DeleteUser")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
-    public void Delete(Guid id)
+    public ActionResult Delete(Guid id)
     {
-        _service.Delete(id);
+        var userId = User.Claims.First(i => i.Type == "UserId").Value;
+        if (id.Equals(Guid.Parse(userId)))
+        {
+            return _service.Delete(id) ? Ok() : UnprocessableEntity();
+        }
+
+        return BadRequest("");
     }
 }

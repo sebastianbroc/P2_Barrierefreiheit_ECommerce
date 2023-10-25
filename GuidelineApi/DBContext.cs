@@ -8,11 +8,13 @@ public class DBContext : DbContext
 
     public DBContext(DbContextOptions options) : base(options)
     {
-        Database.Migrate();
+        if (!Database.IsInMemory())
+        {
+            Database.Migrate();
+        }
     }
 
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Guideline> Guidelines { get; set; }
-    public DbSet<AuthUser> AuthUsers { get; set; }
     public DbSet<User> Users { get; set; }
 }
