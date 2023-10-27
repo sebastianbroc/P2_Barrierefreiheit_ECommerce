@@ -106,7 +106,7 @@ export default {
     async getActivity(){
       let activities = await AuthService.getUserActivity({user_id: this.$route.query.u})
       activities = activities.msg
-      activities = activities.map(item => {return {...item, date: moment(item.timestamp).format("d.m.Y")}})
+      activities = activities.map(item => {return {...item, date: moment(item.timestamp).format("D.M.Y")}})
       this.contributions = activities
     },
     setImage(base64){
