@@ -31,4 +31,4 @@ yarn serve
 ### Links
 Keycloak: [https://auth.burnoutstud.io/](https://auth.burnoutstud.io/) <br>
 Swagger API: [https://api.burnoutstud.io/](https://api.burnoutstud.io/swagger/index.html) <br>
-Frontend: [https://guidelines.burnoutstud.io/](https://guidelines.burnoutstud.io/) <br>
+Frontend: [https://guideline.burnoutstud.io/](https://guideline.burnoutstud.io/) <br>
