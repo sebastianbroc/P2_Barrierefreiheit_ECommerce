@@ -7,7 +7,7 @@ services:
     image: 'guidelineapi'
     build:
       context: .
-      dockerfile: guidelineapi.dockerfile
+      dockerfile: ./GuidelineApi/Dockerfile
     environment:
       DB_CONN: "UserID=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Host=postgres;Port=5432;Database=${POSTGRES_DB};"
       SALT: ${SALT}
@@ -39,10 +39,9 @@ services:
     image: 'guidelinefrontend'
     build:
       context: .
-      dockerfile: ../frontend/th_koeln_barrierefreiheit/guidelinefrontend.dockerfile
+      dockerfile: ./frontend/th_koeln_barrierefreiheit/Dockerfile
     ports:
-      - '80:80'
-      - '443:443'
+      - '8080:8080'
     networks:
       - guidelineapi-network
     

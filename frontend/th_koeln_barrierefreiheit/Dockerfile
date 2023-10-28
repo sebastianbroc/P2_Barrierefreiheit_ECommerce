@@ -2,7 +2,6 @@
 
 # install simple http server for serving static content
 RUN npm install -g http-server
-RUN apk add --no-cache python3 make g++
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -19,5 +18,5 @@ COPY . .
 # build app for production with minification
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 8080 8080
 CMD [ "http-server", "dist" ]
