@@ -15,8 +15,8 @@ services:
       JWT_AUDIENCE: "GuidelineAPI"
       JWT_KEY: ${JWT_KEY} 
     ports:
-      - "443:443"
-      - "80:80"
+      - "5278:443"
+      - "5279:80"
     depends_on:
       - "postgres"
     networks:
@@ -41,7 +41,7 @@ services:
       context: ./frontend/th_koeln_barrierefreiheit
       dockerfile: ./Dockerfile
     ports:
-      - '8080:8080'
+      - '8282:8080'
     networks:
       - guidelineapi-network
     
