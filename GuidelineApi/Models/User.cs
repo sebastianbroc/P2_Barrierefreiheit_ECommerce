@@ -8,7 +8,7 @@ public class User : BaseModel
     
     public string? LastName { get; set; }
     public string? ProfilePicture { get; set; }
-    public bool? IsExpert { get; set; }
+    public bool IsExpert { get; set; } = false;
     public string? Description { get; set; }
     public string? Qualification { get; set; }
 }
@@ -67,7 +67,7 @@ public static class UserDtoExtensions
             Name = user.Name,
             LastName = user.LastName,
             ProfilePicture = user.ProfilePicture,
-            IsExpert = user.IsExpert ?? false,
+            IsExpert = user.IsExpert,
             Description = user.Description,
             Qualification = user.Qualification
         };
@@ -79,7 +79,7 @@ public static class UserDtoExtensions
         {
             Username = user.Username,
             ProfilePicture = user.ProfilePicture,
-            IsExpert = user.IsExpert ?? false
+            IsExpert = user.IsExpert
         };
     }
     
@@ -89,7 +89,7 @@ public static class UserDtoExtensions
         {
             Username = user.Username,
             ProfilePicture = user.ProfilePicture,
-            IsExpert = user.IsExpert ?? false
+            IsExpert = user.IsExpert
         };
     }
 }

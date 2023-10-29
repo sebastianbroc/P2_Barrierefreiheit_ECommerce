@@ -6,7 +6,7 @@
         <div class="bio_wrapper">
           <img v-if="user.image" :src="user.image">
           <div class="bio">
-            <div style="display: flex; align-items: center; gap: 20px;"><h1>{{user.name}}</h1><span v-if="user.is_expert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span><img src="@/assets/images/edit.svg" alt="Profil bearbeiten" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.toggleEditView" id="editButton"></div>
+            <div style="display: flex; align-items: center; gap: 20px;"><h1>{{user.name}}</h1><span v-if="user.isExpert" class="verified_badge"><img src="@/assets/images/checkmark.png">Experte</span><img src="@/assets/images/edit.svg" alt="Profil bearbeiten" v-if="this.$store.getters.isLoggedIn && this.$route.query.u == this.$store.getters.getUser.id" @click="this.toggleEditView" id="editButton"></div>
             <p>{{user.bio}}</p>
             <h2>Mitglied seit {{user.registered}}</h2>
           </div>
@@ -21,7 +21,7 @@
               <h4>{{contribution.date}}</h4>
             </div>
           </div>
-          <div class="expert_qualification" v-if="user.is_expert">
+          <div class="expert_qualification" v-if="user.isExpert">
             <h1>Expertenqualifikation</h1>
             <p>{{user.qualification}}</p>
           </div>

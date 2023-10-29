@@ -53,38 +53,45 @@ export default {
     async login(){
         try {
           const credentials = {
-            email: this.login_email,
+            username: this.login_email,
             password: this.login_password
           };
           const response = await AuthService.login(credentials);
-
-          const token = response.token;
-          const user = response.user;
-
-          this.$store.dispatch('login', { token, user });
           console.log(response)
+          if(response.status == 200){
+            console.log("logged in")
+            const token = response.data.token;
+            const user = response.data.user;
 
-          this.$router.push('/menu');
+            this.$store.dispatch('login', { token, user });
+            console.log(response)
+
+            this.$router.push('/menu');
+          }
+          console.log("no logged in")
         } catch (error) {
+          console.log(error);
           this.msg = error.response.data.msg;
         }
     },
     async register(){
       try {
         const credentials = {
-          email: this.register_email,
+          username: this.register_email,
           name: this.register_name,
           password: this.register_password,
           password_repeat: this.register_password_repeat
         };
         const response = await AuthService.signUp(credentials);
         this.msg = response.msg;
-        if(response.msg == "Registrierung erfolgreich!"){
+        if(response.status == 200){
           this.login_email = this.register_email
           this.login_password = this.register_password
+          console.log("registered!")
           this.login()
         }
       } catch (error) {
+        console.log(error)
         this.msg = error.response.data.msg;
       }
 

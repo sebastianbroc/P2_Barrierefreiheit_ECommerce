@@ -20,8 +20,8 @@
         <div class="approvers">
           <router-link v-for="approvement in guideline.approvements" :to="'/user?u=' + approvement.id" :key="approvement.userId" :value="approvement.userId"><img :src=approvement.image><p class="expert_name">{{approvement.name}}</p></router-link>
         </div>
-        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && !this.alreadyApproved && this.guideline.author_id != this.$store.getters.getUser.id"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
-        <button id="approve_button" class="revert" @click="revertApproval" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.is_expert && this.alreadyApproved"><img src="@/assets/images/cancel.svg" style="filter: invert(100%);">Bestätigung zurückziehen</button>
+        <button id="approve_button" @click="approveGuideline" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.isExpert && !this.alreadyApproved && this.guideline.author_id != this.$store.getters.getUser.id"><img src="@/assets/images/checkmark.png">Guideline Bestätigen</button>
+        <button id="approve_button" class="revert" @click="revertApproval" v-if="this.$store.getters.isLoggedIn && this.$store.getters.getUser && this.$store.getters.getUser.isExpert && this.alreadyApproved"><img src="@/assets/images/cancel.svg" style="filter: invert(100%);">Bestätigung zurückziehen</button>
       </div>
       <div id="annotation" :class="{anno_loading: annotationLoading, active: activeAnnotation}">
         <div v-if="activeAnnotation">

@@ -75,7 +75,7 @@ module.exports = {
                             msg: err
                         });
                     } else {
-                        if(result[0].is_expert){
+                        if(result[0].isExpert){
                             next()
                         } else {
                             return res.status(401).send({
