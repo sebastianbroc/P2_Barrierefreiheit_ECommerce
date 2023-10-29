@@ -9,7 +9,7 @@ services:
       context: ./GuidelineApi
       dockerfile: ./Dockerfile
     environment:
-      DB_CONN: "UserID=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Host=postgres;Port=5432;Database=${POSTGRES_DB};"
+      DB_CONN: "UserID=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Host=guidelinepostgres;Port=5432;Database=${POSTGRES_DB};"
       SALT: ${SALT}
       JWT_ISSUER: "GuidelineAPI"
       JWT_AUDIENCE: "GuidelineAPI"
