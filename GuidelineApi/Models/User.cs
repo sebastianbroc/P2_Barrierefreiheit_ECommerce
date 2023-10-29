@@ -13,6 +13,12 @@ public class User : BaseModel
     public string? Qualification { get; set; }
 }
 
+public class UserLoginResponseDto
+{
+    public string Token { get; set; }
+    public User User { get; set; }
+}
+
 public class UserLoginDto
 {
     public string Username { get; set; }

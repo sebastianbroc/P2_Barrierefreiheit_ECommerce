@@ -65,7 +65,11 @@ public class AuthentificationController : ControllerBase
         var user = _service.GetUser(userLogin.Username);
         if (user != null && user.Password == hashed)
         {
-            return Ok(_authenticationService.GenerateToken(user));
+            return Ok( new UserLoginResponseDto()
+            {
+                Token = _authenticationService.GenerateToken(user),
+                User = user
+            });
         }
 
         return BadRequest();
