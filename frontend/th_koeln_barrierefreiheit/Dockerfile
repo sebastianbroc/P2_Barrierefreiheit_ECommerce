@@ -2,9 +2,6 @@
 
 # install simple http server for serving static content
 RUN npm install -g http-server
-RUN apk add --no-cache --virtual .build-deps ca-certificates wget python make && \
-    yarn install --no-cache && \
-    apk del .build-deps
     
 # make the 'app' folder the current working directory
 WORKDIR /app
