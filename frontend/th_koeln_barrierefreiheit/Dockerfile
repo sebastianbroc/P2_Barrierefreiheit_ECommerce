@@ -2,6 +2,9 @@
 
 # install simple http server for serving static content
 RUN npm install -g http-server
+RUN apk add --no-cache make gcc g++ python && \
+  npm install --production --silent && \
+  apk del make gcc g++ python
 
 # make the 'app' folder the current working directory
 WORKDIR /app
