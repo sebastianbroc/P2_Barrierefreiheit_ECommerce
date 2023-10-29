@@ -51,17 +51,8 @@ builder.Services.AddAuthentication(options =>
     
 });
 
-
-if (isDevelopment)
-{
-    builder.Services.AddDbContext<DBContext>(options => options.UseInMemoryDatabase("GuidelineAPI"));
-}
-else
-{
-    Console.WriteLine("Running in production mode");
-    builder.Services.AddDbContext<DBContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONN") ?? builder.Configuration["DB_CONN"]));
-}
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONN") ?? builder.Configuration["DB_CONN"]));
 
 builder.Services.AddCors(options =>
 {

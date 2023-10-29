@@ -50,8 +50,7 @@ public static class UserDtoExtensions
             ProfilePicture = user.ProfilePicture,
             IsExpert = user.IsExpert ?? false,
             Description = user.Description,
-            Qualification = user.Qualification,
-            //Guidelines = user.Guidelines
+            Qualification = user.Qualification
         };
     }
     

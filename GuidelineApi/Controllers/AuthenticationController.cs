@@ -47,8 +47,7 @@ public class AuthentificationController : ControllerBase
         {
             id = Guid.NewGuid(),
             Username = username,
-            Password = hashed,
-            //Guidelines = new ()
+            Password = hashed
         }).ToUserDto();
     }
     

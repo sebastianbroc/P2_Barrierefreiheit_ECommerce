@@ -6,11 +6,10 @@ namespace GuidelineAPI;
 public class DBContext : DbContext
 {
 
-    public DBContext(DbContextOptions options, ILogger<DBContext> logger) : base(options)
+    public DBContext(DbContextOptions options) : base(options)
     {
         if (!Database.IsInMemory())
         {
-            logger.LogDebug("Migrate");
             Database.Migrate();
         }
     }
