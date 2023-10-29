@@ -10,12 +10,11 @@ Im [Wiki](https://github.com/sebastianbroc/P2_Barrierefreiheit_ECommerce/wiki) g
 
 ## Getting Started 🚀
 ### API
-Der einfachste Weg die Guideline API lokal zu installieren und zu starten ist mittels des docker-compose.yaml im /GuidelineApi/ verzeichnis.
+Der einfachste Weg die Guideline API lokal zu installieren und zu starten ist mittels des docker-compose.yaml im root verzeichnis.
 Die jeweiligen JWT Keys, Salts usw. können selbstverständlich in der .env datei nach eigenem belieben geändert werden. 
 Dabei sollte darauf geachtet werden dass die Keys Base64 Kompatibel und somit eine Zeichenlänge benötigen, die durch 4 teilbar ist.
 
 ```shell
-cd GuidelineApi
 docker compose up
 ```
 
@@ -32,3 +31,7 @@ yarn serve
 Keycloak: [https://auth.burnoutstud.io/](https://auth.burnoutstud.io/) <br>
 Swagger API: [https://api.burnoutstud.io/](https://api.burnoutstud.io/swagger/index.html) <br>
 Frontend: [https://guideline.burnoutstud.io/](https://guideline.burnoutstud.io/) <br>
+
+Alle oben aufgeführten Links sind an unsere Pipeline angebunden. Ein jeder push ins main branch triggert einen neuen Build und updated Frontend, Backend und Datenbank nach automatisierter Migration der Modelle.
+![image](https://github.com/sebastianbroc/P2_Barrierefreiheit_ECommerce/assets/12944992/7fcc8c89-2ef5-4061-92c1-e82eae70ce4c)
+
