@@ -33,36 +33,36 @@ public class AuthentificationController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost( "register")]
-    public UserDto? Register(string username, string password)
+    public UserDto? Register(UserRegisterDto user)
     {
         
         var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
+            password: user.Password,
             salt: _configuration.GetValue<byte[]>("SALT") ?? throw new InvalidOperationException(),
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
 
-        return _service.GetUser(username) != null ? null : _service.Create(new User()
+        return _service.GetUser(user.Username) != null ? null : _service.Create(new User()
         {
             id = Guid.NewGuid(),
-            Username = username,
+            Username = user.Username,
             Password = hashed
         }).ToUserDto();
     }
     
     [AllowAnonymous]
     [HttpPost( "login")]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(UserLoginDto userLogin)
     {
         var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
+            password: userLogin.Password,
             salt: _configuration.GetValue<byte[]>("SALT") ?? throw new InvalidOperationException(),
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
         
-        var user = _service.GetUser(username);
+        var user = _service.GetUser(userLogin.Username);
         if (user != null && user.Password == hashed)
         {
             return Ok(_authenticationService.GenerateToken(user));
