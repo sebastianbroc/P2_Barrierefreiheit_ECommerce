@@ -33,7 +33,7 @@ public class AuthentificationController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost( "register")]
-    public UserDto? Register(UserRegisterDto user)
+    public IActionResult Register(UserRegisterDto user)
     {
         
         var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -43,12 +43,12 @@ public class AuthentificationController : ControllerBase
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
 
-        return _service.GetUser(user.Username) != null ? null : _service.Create(new User()
+        return _service.GetUser(user.Username) != null ? BadRequest(null) : Ok(_service.Create(new User()
         {
             id = Guid.NewGuid(),
             Username = user.Username,
             Password = hashed
-        }).ToUserDto();
+        }).ToUserDto());
     }
     
     [AllowAnonymous]
