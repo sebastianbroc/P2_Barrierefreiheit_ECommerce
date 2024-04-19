@@ -9,6 +9,8 @@ const db = require('../lib/db.js');
 const userMiddleware = require('../middleware/users.js');
 const database = require('../middleware/database_functions.js');
 
+const Keycloak = require('../lib/keycloak.js');
+
 router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
     db.query(
         `SELECT * FROM users WHERE LOWER(email) = LOWER(${db.escape(
@@ -52,7 +54,30 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
     );
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', async (req, res, next) => {
+
+    var keycloak_token = await Keycloak.authenticateUser(req.body.email, req.body.password);
+    if (keycloak_token !== undefined) {
+
+        var user = await Keycloak.checkUserCreated(req.body.email);
+        if(user !== undefined){
+            Keycloak.setLastLogin(req.body.email);
+            
+            const token = jwt.sign({
+                email: user.email,
+                userId: user.id
+            },
+            'SECRETKEY', {}
+            );
+
+            return res.status(200).send({
+                msg: 'Login erfolgreich!',
+                token,
+                user: user
+            });
+        }
+    }
+
     db.query(
         `SELECT * FROM users WHERE email = ${db.escape(req.body.email)};`,
         (err, result) => {
